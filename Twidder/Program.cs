@@ -1,6 +1,7 @@
 using Microsoft.AspNetCore.Identity;
 using Microsoft.EntityFrameworkCore;
 using Twidder.Data;
+using Twidder.Models;
 using Twidder.Models.ArticlesApp.Models;
 
 var builder = WebApplication.CreateBuilder(args);
@@ -21,6 +22,14 @@ builder.Services.AddDefaultIdentity<ApplicationUser>(options => options.SignIn.R
 builder.Services.AddControllersWithViews();
 
 var app = builder.Build();
+
+//pass 5
+using (var scope = app.Services.CreateScope())
+{
+    var services = scope.ServiceProvider;
+    SeedData.Initialize(services);
+}
+
 
 // Configure the HTTP request pipeline.
 if (app.Environment.IsDevelopment())
