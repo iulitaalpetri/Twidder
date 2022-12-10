@@ -9,7 +9,7 @@ namespace Twidder.Models
 
         public class ApplicationUser : IdentityUser
         {
-
+            //ceva
         }
     }
 
