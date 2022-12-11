@@ -1,0 +1,25 @@
+﻿
+@{
+    ViewBag.Title = "Afisare grup";
+}
+
+
+<h2>@ViewBag.Title</h2>
+
+<br />
+
+
+<p>@ViewBag.Group.GroupName</p>
+
+<form method="post" action="/Groups/Delete/@ViewBag.Group.Id">
+
+    <button class="btn btn-danger" type="submit">Sterge grupul</button>
+
+</form>
+<br />
+<a class="btn alert-success" href="/Groups/Index/">Afisare lista grupuri</a>
+
+<br />
+<hr />
+<br />
+

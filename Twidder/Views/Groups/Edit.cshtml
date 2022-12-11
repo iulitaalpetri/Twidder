@@ -1,0 +1,17 @@
+﻿
+@{
+    ViewBag.Title = "Editare grup";
+}
+
+<h2>@ViewBag.Title</h2>
+
+<form method="post" action="/Groups/Edit/@ViewBag.Group.Id">
+
+
+    <label>Nume grup</label>
+    <br /> <input type="text" name="GroupName" value="@ViewBag.Group.GroupName" />
+    <br /><br />
+
+    <button class="btn btn-success" type="submit">Modifica grupul</button>
+</form>
+

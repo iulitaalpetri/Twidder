@@ -1,0 +1,25 @@
+﻿
+@{
+    ViewBag.Title = "Lista grupuri";
+}
+
+<h2>@ViewBag.Title</h2>
+<br />  
+
+<a href="/Posts/Index">Inapoi la postari</a>
+<br />
+<br />
+
+@foreach (var group in ViewBag.Groups)
+{
+        <p>@group.GroupName</p>
+        <a class="btn alert-success" href="/Groups/Show/@group.Id">Afisare grup</a>
+        <a class="btn alert-success" href="/Groups/Edit/@group.Id">Editare grup</a>
+        <br />
+        <hr />
+        <br />
+}
+<br />
+<a class="btn btn-success" href="/Groups/New">Adauga un grup nou</a>
+<br />
+

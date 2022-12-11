@@ -1,0 +1,46 @@
+﻿@{
+    ViewBag.Title = "Index";
+}
+
+<h2>Posts Feed</h2>
+<br />
+
+<div class="d-flex justify-content-center">
+
+    <a class="btn btn-outline-success" href="/Groups/Index/">Groups</a>
+    <br />
+    <a class="btn btn-outline-success" href="/Posts/New">New Post</a>
+    <br />
+
+</div>
+
+<br />
+
+
+@foreach (var post in ViewBag.Posts)
+{
+    <div class="card">
+
+        <div class="card-body">
+
+            <div class="card-text">@post.Content</div>
+
+            <div class="d-flex justify-content-between flex-row mt-5">
+
+                <div><i class="bi bi-globe"></i> @post.Group.GroupName</div>
+
+                <a class="btn btn-success" href="/Posts/Show/@post.Id">Afisare postare</a>
+
+                <span class="alert-success">@post.Date</span>
+
+            </div>
+
+        </div>
+
+    </div>
+
+    <br />
+    <br />
+}
+
+
