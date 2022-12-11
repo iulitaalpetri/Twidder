@@ -1,6 +1,7 @@
 ﻿using Microsoft.AspNetCore.Mvc.Rendering;
 using System.ComponentModel.DataAnnotations.Schema;
 using System.ComponentModel.DataAnnotations;
+using Twidder.Models.ArticlesApp.Models;
 
 namespace Twidder.Models
 {
@@ -19,7 +20,9 @@ namespace Twidder.Models
 
         public virtual ICollection<Comment>? Comments { get; set; }
 
-       // [NotMapped]
+        public virtual ApplicationUser User { get; set; }
+
+        // [NotMapped]
 
     }
 
