@@ -1,5 +1,5 @@
 ﻿using System.ComponentModel.DataAnnotations;
-using Twidder.Models.ArticlesApp.Models;
+
 
 namespace Twidder.Models
 {

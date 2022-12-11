@@ -1,4 +1,5 @@
 ﻿using Microsoft.AspNetCore.Authorization;
+using Microsoft.AspNetCore.Identity;
 using Microsoft.AspNetCore.Mvc;
 using Microsoft.AspNetCore.Mvc.Rendering;
 using Microsoft.EntityFrameworkCore;
@@ -13,10 +14,20 @@ namespace Twidder.Controllers
     {
         private readonly ApplicationDbContext db;
 
-        public PostsController(ApplicationDbContext context){
-            db= context; 
-        }
+        private readonly UserManager<ApplicationUser> _userManager;
 
+        private readonly RoleManager<IdentityRole> _roleManager;
+
+        public PostsController(ApplicationDbContext context,
+            UserManager<ApplicationUser> userManager,
+            RoleManager<IdentityRole> roleManager)
+        {
+            db= context;
+
+            _userManager = userManager;
+
+            _roleManager = roleManager;
+        }
 
 
         public IActionResult Index()
@@ -93,7 +104,7 @@ namespace Twidder.Controllers
         public IActionResult New(Post post)
         {
             post.Date = DateTime.Now;
-            
+            post.UserId = _userManager.GetUserId(User);
 
             if (ModelState.IsValid)
             {

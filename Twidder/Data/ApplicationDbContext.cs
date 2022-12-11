@@ -1,7 +1,6 @@
 ﻿using Microsoft.AspNetCore.Identity.EntityFrameworkCore;
 using Microsoft.EntityFrameworkCore;
 using Twidder.Models;
-using Twidder.Models.ArticlesApp.Models;
 
 namespace Twidder.Data
 {

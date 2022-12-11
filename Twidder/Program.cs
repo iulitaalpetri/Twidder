@@ -2,7 +2,6 @@ using Microsoft.AspNetCore.Identity;
 using Microsoft.EntityFrameworkCore;
 using Twidder.Data;
 using Twidder.Models;
-using Twidder.Models.ArticlesApp.Models;
 
 var builder = WebApplication.CreateBuilder(args);
 

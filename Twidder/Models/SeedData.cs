@@ -2,7 +2,6 @@
 using Microsoft.EntityFrameworkCore;
 using System.Collections.Generic;
 using Twidder.Data;
-using Twidder.Models.ArticlesApp.Models;
 
 namespace Twidder.Models
 {

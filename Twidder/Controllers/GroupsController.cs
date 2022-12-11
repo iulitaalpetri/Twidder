@@ -1,4 +1,5 @@
 ﻿using Microsoft.AspNetCore.Mvc;
+using Microsoft.EntityFrameworkCore;
 using Twidder.Data;
 using Twidder.Models;
 
@@ -16,7 +17,14 @@ namespace Twidder.Controllers
             db = context;
         }
         public ActionResult Index()
+
+            
         {
+            var groups = db.Groups.Include("User");
+
+
+            ViewBag.Groups = groups;
+
             if (TempData.ContainsKey("message"))
             {
                 ViewBag.message = TempData["message"].ToString();
