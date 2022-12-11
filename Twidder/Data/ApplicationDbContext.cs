@@ -14,5 +14,7 @@ namespace Twidder.Data
 
         public DbSet<Post> Posts { get; internal set; }
         public DbSet<Comment> Comments { get; internal set; }
+
+        public DbSet<Group> Groups{ get; internal set; }
     }
 }

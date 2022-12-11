@@ -1,4 +1,5 @@
-﻿using Microsoft.AspNetCore.Mvc;
+﻿using Microsoft.AspNetCore.Authorization;
+using Microsoft.AspNetCore.Mvc;
 using Microsoft.AspNetCore.Mvc.Rendering;
 using Microsoft.EntityFrameworkCore;
 using Twidder.Data;
@@ -6,6 +7,8 @@ using Twidder.Models;
 
 namespace Twidder.Controllers
 {
+
+    [Authorize]
     public class PostsController : Controller
     {
         private readonly ApplicationDbContext db;

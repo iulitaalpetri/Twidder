@@ -10,7 +10,7 @@ namespace Twidder.Models
         public int Id { get; set; }
 
         [Required(ErrorMessage = "Numele grupului este obligatoriu")]
-        public string CategoryName { get; set; }
+        public string GroupName { get; set; }
 
         public virtual ICollection<ApplicationUser>? ApplicationUser { get; set; }
     }
