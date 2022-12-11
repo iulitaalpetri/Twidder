@@ -5,6 +5,10 @@
 <h2>Posts Feed</h2>
 <br />
 
+@if(ViewBag.Message != null){
+    <h2 class="alert-success p-3 rounded-3 text-center mb-5">@ViewBag.Message</h2>
+}
+
 <div class="d-flex justify-content-center">
 
     <a class="btn btn-outline-success" href="/Groups/Index/">Groups</a>

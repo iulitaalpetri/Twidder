@@ -1,4 +1,6 @@
-﻿
+﻿@model Twidder.Models.Comment
+
+
 @{
     ViewBag.Title = "Edit";
 }
@@ -6,15 +8,24 @@
 <h2>Editare comentariu</h2>
 <br />
 
-<form method="post" action="/Comments/Edit/@ViewBag.Comment.Id">
 
-    <label>Continut comentariu</label>
+@using (Html.BeginForm(controllerName: "Comments", actionName: "Edit",
+      method: FormMethod.Post, routeValues: new { id = Model.Id }))
+
+{
+    @Html.Label("Content", "Continut comentariu")
+
     <br />
 
-    <textarea name="Content">@ViewBag.Comment.Content</textarea>
+    @Html.Editor("Content", new { @class = "form-control" })
+    <br />
+
+    @Html.ValidationMessage("Content", null, new { @class = "text-danger" })
+
+    <br />
     <br />
 
     <button class="btn  btn-primary" type="submit">Editeaza comentariul</button>
 
-</form>
+}
 
