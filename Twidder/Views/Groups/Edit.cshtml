@@ -1,17 +1,28 @@
-﻿
+﻿@model ArticlesApp.Models.Category
+
+
 @{
     ViewBag.Title = "Editare grup";
 }
 
 <h2>@ViewBag.Title</h2>
 
-<form method="post" action="/Groups/Edit/@ViewBag.Group.Id">
+
+@using (Html.BeginForm(controllerName: "Groups", actionName: "Edit", method: FormMethod.Post,
+      routeValues: new { id = Model.Id }))
+{
+    @Html.Label("GroupName", "Denumire grup")
+            <br />
+    @Html.Editor("GroupName")
+
+    @Html.ValidationMessageFor(m => m.GroupName, null, new { @class = "text-danger" })
+            <br />
+
+            <br />
+
+            <button class="btn btn-success" type="submit">Modifica grupul</button>
+}
 
 
-    <label>Nume grup</label>
-    <br /> <input type="text" name="GroupName" value="@ViewBag.Group.GroupName" />
-    <br /><br />
 
-    <button class="btn btn-success" type="submit">Modifica grupul</button>
-</form>
 

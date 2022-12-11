@@ -1,4 +1,4 @@
-﻿
+﻿model Twidder.Models.Group
 @{
     ViewBag.Title = "Afisare grup";
 }
@@ -9,15 +9,16 @@
 <br />
 
 
-<p>@ViewBag.Group.GroupName</p>
+<p>@Model.GroupName</p>
 
-<form method="post" action="/Groups/Delete/@ViewBag.Group.Id">
+
+<form method="post" action="/Groups/Delete/@Model.Id">
 
     <button class="btn btn-danger" type="submit">Sterge grupul</button>
 
 </form>
 <br />
-<a class="btn alert-success" href="/Groups/Index/">Afisare lista grupuri</a>
+<a class="btn alert-success" href="/Categories/Index/">Afisare lista grupuri</a>
 
 <br />
 <hr />

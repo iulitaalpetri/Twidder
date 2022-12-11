@@ -4,7 +4,12 @@
 }
 
 <h2>@ViewBag.Title</h2>
-<br />  
+<br /> 
+
+@if (TempData.ContainsKey("message"))
+{
+    <h1>@ViewBag.message</h1>
+}
 
 <a href="/Posts/Index">Inapoi la postari</a>
 <br />
@@ -12,6 +17,7 @@
 
 @foreach (var group in ViewBag.Groups)
 {
+        @Html.Label("Group Name", "Denumire grup")
         <p>@group.GroupName</p>
         <a class="btn alert-success" href="/Groups/Show/@group.Id">Afisare grup</a>
         <a class="btn alert-success" href="/Groups/Edit/@group.Id">Editare grup</a>

@@ -1,4 +1,5 @@
-﻿
+﻿@model Twidder.Models.Group
+
 @{
     ViewBag.Title = "Adaugare Grup";
 }
@@ -15,4 +16,21 @@
     <br /><br />
     <button class="btn btn-success" type="submit">Adauga grup</button>
 </form>
+
+@using (Html.BeginForm(actionName: "New", controllerName: "Groups", method: FormMethod.Post))
+{
+
+    @Html.Label("GroupName", "Denumire grup")
+        <br />
+
+    @Html.TextBox("GroupName", null, new { @class = "form-control" })
+
+    @Html.ValidationMessageFor(m => m.GroupName, null, new { @class = "text-danger" })
+        <br />
+
+    <br />
+
+        <button class="btn btn-success" type="submit">Adauga grup</button>
+
+}
 
