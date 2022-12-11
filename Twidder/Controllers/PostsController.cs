@@ -86,21 +86,21 @@ namespace Twidder.Controllers
 
         // Se adauga articolul in baza de date
         [HttpPost]
-        public IActionResult New(Article article)
+        public IActionResult New(Post post)
         {
-            article.Date = DateTime.Now;
-            article.Categ = GetAllCategories();
+            post.Date = DateTime.Now;
+            
 
             if (ModelState.IsValid)
             {
-                db.Articles.Add(article);
+                db.Posts.Add(post);
                 db.SaveChanges();
-                TempData["message"] = "Articolul a fost adaugat";
+                TempData["message"] = "Postarea a fost adaugat";
                 return RedirectToAction("Index");
             }
             else
             {
-                return View(article);
+                return View(post);
             }
 
             /*
