@@ -36,7 +36,7 @@ namespace Twidder.Models
                 var hasher = new PasswordHasher<ApplicationUser>();
                 // CREAREA USERILOR IN BD
                 // Se creeaza cate un user pentru fiecare rol
-                context.Users.AddRange(
+                /*context.Users.AddRange(
                 new ApplicationUser
                 {
                     Id = "8e445865-a24d-4543-a6c6-9443d048cdb0",
@@ -76,7 +76,7 @@ new ApplicationUser
                    RoleId = "2c5e174e-3b0e-446f-86af483d56fd7212",
                    UserId = "8e445865-a24d-4543-a6c6-9443d048cdb2"
                }
-                );
+                );*/
                 context.SaveChanges();
             }
         }
