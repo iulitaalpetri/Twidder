@@ -54,12 +54,10 @@ namespace Twidder.Controllers
         // HttpGet implicit
         public IActionResult Show(int id)
         {
-            /*Post post = db.Posts.Include("User").Include("Comments")
-                                 .Where(pst => pst.Id == id)
-                                 .First();*/
-            Post post = db.Posts
+            Post post = db.Posts.Include("User").Include("Comments")
                                  .Where(pst => pst.Id == id)
                                  .First();
+            
 
             return View(post);
         }

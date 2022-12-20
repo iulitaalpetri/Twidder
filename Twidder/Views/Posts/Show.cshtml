@@ -49,6 +49,7 @@
 
 @* Afisare comentarii impreuna cu butoanele de editare si stergere *@
 
+
 @foreach (var comm in Model.Comments)
 {
     <div class="container">
@@ -61,13 +62,13 @@
 
                     <p>@comm.Content</p>
                     <small>@comm.Date</small>
-                    <strong><i class="bi bi-person"></i>@comm.User.UserName</strong>
+                    <strong><i class="bi bi-person"></i>@comm.User</strong>
 
                 </div>
                 <br>
 
 
-                    @if (comm.User.UserName == ViewBag.UserCurent || ViewBag.EsteAdmin)
+                    @if (comm.User == ViewBag.UserCurent || ViewBag.EsteAdmin)
                     {
 
                         <div class="d-flex">
@@ -101,6 +102,7 @@
 
     </div>
 }
+
 
 
 @* Afisarea formularului in care se poate adauga un comentariu *@
