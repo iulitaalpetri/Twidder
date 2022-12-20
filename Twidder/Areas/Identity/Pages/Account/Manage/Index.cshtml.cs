@@ -215,7 +215,7 @@ namespace Twidder.Areas.Identity.Pages.Account.Manage
         }
 
 
-
+        /*
         ApplicationDbContext db;
 
 
@@ -236,7 +236,7 @@ namespace Twidder.Areas.Identity.Pages.Account.Manage
             //??????????
             return View(search);
         }
-
+        */
     }
 
 
