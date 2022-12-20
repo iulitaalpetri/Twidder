@@ -216,24 +216,25 @@ namespace Twidder.Areas.Identity.Pages.Account.Manage
 
 
 
+        ApplicationDbContext db;
+
 
         [HttpPost]
-        public ActionResult search(int? id, string searchString, ApplicationUser user)
+        public ActionResult search(string searchString, ApplicationUser user)
         {
             //Lambda Linq to entity does not support Int32
             //var search = (from d in db.students where d.No == Convert.ToInt32(id) && d.Name == id select d).ToList();
             //var search = db.students.Where(d => d.No == Convert.ToInt32(id) && d.Name == id).ToList();
-            query = db.students.AsQueryable();
-            if (id.HasValue)
-            {
-                var studentId = id.Value;
-                query = query.Where(d => d.No == studentId);
-            }
+
+            var query = db.Users.AsQueryable();
+
+
             if (!string.IsNullOrEmpty(searchString))
-                query = query.Where(d => d.Name.Contains(searchString));
+                query = query.Where(d => d.FirstName.Contains(searchString));
 
             var search = query.ToList();
-            return View("index", search);
+            //??????????
+            return View(search);
         }
 
     }
