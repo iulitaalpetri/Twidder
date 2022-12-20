@@ -216,10 +216,6 @@ namespace Twidder.Areas.Identity.Pages.Account.Manage
 
 
 
-/*
-=======
-        /*
->>>>>>> 7e74c9808e1c1462643a88ce4e19f68c0f508541
         ApplicationDbContext db;
 
 
@@ -240,10 +236,6 @@ namespace Twidder.Areas.Identity.Pages.Account.Manage
             //??????????
             return View(search);
         }
-<<<<<<< HEAD
-*/
-
-
 
     }
 
