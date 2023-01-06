@@ -1,31 +1,31 @@
 ﻿
 @{
-    ViewBag.Title = "Lista grupuri";
+    ViewBag.Title = "Index";
 }
+<div class="IndexMessage text-center container">
+    <h1>@ViewBag.Message</h1>
+    <h2> Grupuri </h2>
+    <a class="btn btn-primary" href="/Groups/New" ">Creeaza un grup</a>
+    <br />
+    <br />
+</div>
+<div class="containerGroups">
+    @foreach (var group in ViewBag.Groups)
+    {
+        <div class="containerPanel">
+            <div class="panel panel-default panelGroup">
+                <div class="panelHeader panel-heading">@group.GroupName</div>
+                <div class="panel-body">
+                    <br />
+                    <strong>@group.GroupDescription</strong>
+                    <br />
+                </div>
 
-<h2>@ViewBag.Title</h2>
-<br /> 
+                <div class="panel panel-footer panelFooter">
+                    <a class="btn btn-success btn"  href="/Groups/Show/@group.GroupId">Afisare grup</a>
+                </div>
+            </div>
+        </div>
 
-@if (TempData.ContainsKey("message"))
-{
-    <h1>@ViewBag.message</h1>
-}
-
-<a href="/Posts/Index">Inapoi la postari</a>
-<br />
-<br />
-
-@foreach (var group in ViewBag.Groups)
-{
-        @Html.Label("Group Name", "Denumire grup")
-        <p>@group.GroupName</p>
-        <a class="btn alert-success" href="/Groups/Show/@group.Id">Afisare grup</a>
-        <a class="btn alert-success" href="/Groups/Edit/@group.Id">Editare grup</a>
-        <br />
-        <hr />
-        <br />
-}
-<br />
-<a class="btn btn-success" href="/Groups/New">Adauga un grup nou</a>
-<br />
-
+    }
+</div>
