@@ -13,11 +13,7 @@ namespace Twidder.Models
         [StringLength(30, ErrorMessage = "Numele nu poate avea mai mult de 30 de caractere")]
         public string GroupName { get; set; }
 
-        [Required(ErrorMessage = "Descrierea este obligatorie")]
-        public string GroupDescription { get; set; }
-        public string CreatorId { get; set; }
-        public virtual ICollection<ApplicationUser> Users { get; set; }
-        public virtual ICollection<Post> Posts { get; set; }
+        public virtual ICollection<ApplicationUser>? ApplicationUser { get; set; }
     }
 
 }

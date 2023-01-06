@@ -16,6 +16,26 @@ namespace Twidder.Controllers
         {
             db = context;
         }
+
+
+        public ActionResult Index()
+        {
+            var groups = db.Groups;
+            ViewBag.Groups = groups;
+            //ViewBag.CurrentUser = db.Users.Find(User.Identity.GetUserId());
+            if (TempData.ContainsKey("message"))
+            {
+                ViewBag.Message = TempData["message"];
+            }
+            return View();
+        }
+
+
+
+        /*
+
+
+
         public ActionResult Index()
 
             
@@ -96,7 +116,7 @@ namespace Twidder.Controllers
             db.SaveChanges();
             return RedirectToAction("Index");
         }
-
+        */
         
     }
 }
