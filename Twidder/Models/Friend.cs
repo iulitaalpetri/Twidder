@@ -6,6 +6,9 @@ namespace Twidder.Models
 
     public class Friend
     {
+        [Key]
+        public int id { get; set; }
+
         public int FriendshipId { get; set; }
         [ForeignKey("User1")]
         public string User1_Id { get; set; }

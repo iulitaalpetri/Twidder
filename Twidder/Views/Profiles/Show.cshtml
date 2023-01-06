@@ -1,0 +1,172 @@
+﻿@*
+    For more information on enabling MVC for empty projects, visit https://go.microsoft.com/fwlink/?LinkID=397860
+*@
+@model Twidder.Models.Profile 
+@using Microsoft.AspNetCore.Identity;
+
+@{
+    ViewBag.Title = "Show profile";
+}
+<a style="background-color:aliceblue" class="btn btn-info" href="/Profiles/Index">Return to profiles</a>
+</br> 
+</br> 
+
+@if(Model.UserId== User.Identity.GetHashCode().ToString()){
+    <h1> @ViewBag.Warning </h1>
+} 
+
+
+@if(Model.PrivateProfile== true){
+
+    if(ViewBag.sentRequest== true){
+
+        <br/>
+        <p style="font-family: 'Audiowide', cursive;">Request sent</p>
+    }
+    else if (ViewBag.friend== true){
+
+        <p style="font-family: 'Audiowide', cursive;"> Friend </p>
+    }
+    else if(ViewBag.sameuser== true){
+
+        <p></p>
+    }
+    else if(ViewBag.nobutton== true){
+        <p></p>
+    }
+    else{
+        <a class="btn btn-info" href="/Profiles/SendRequest/@Model.ProfileId">Add friend</a>
+    }
+}
+
+
+@if((User.IsInRole("Admin")|| Model.UserId== ViewBag.UserId)|| Model.PrivateProfile==false){
+
+    <div class="divButoane container text-center">
+
+        @if(User.IsInRole("Admin")){
+            <a style="        background-color: #36b4e8; color: black;" class="btn btn-info" href="/Profiles/New">Add profile</a>
+        }
+
+
+        @if(ViewBag.sentRequest== true){
+
+            <br />
+            <p style="font-family: 'Audiowide', cursive; color:black; margin-top:-20px"> Request sent </p>
+        }
+        else if(ViewBag.friend==true){
+
+            <br />
+            <p style="font-family: 'Audiowide', cursive;"> Friend </p>
+        }
+        else if(ViewBag.sameUser== true){
+
+            <a style="        background-color: #36b4e8; color: black;" class="btn btn-info" href="/Profiles/FriendRequests/@Model.ProfileId">Friend Requests</a>
+        }
+        else if( ViewBag.nobutton ==  true){
+            <p> </p>
+        }
+        else {
+            <a class="btn btn-info" href="/Profiles/SendRequest/@Model.ProfileId">Add friend </a>
+        }
+
+
+
+
+        <a style="        background-color: #36b4e8; color: black;" class="btn btn-info" href="/Profiles/Friends/@Model.ProfileId">Friends</a>
+
+        <a style="        background-color: #36b4e8; color: black;" class="btn btn-info" href="/Profiles/JoinedGroups/@Model.ProfileId">Groups</a>
+
+
+    </div>
+
+    <br/> 
+    <br/> 
+
+
+    <div class="panel panel-default groupInfo">
+        <div class="panel-heading text-center">@Model.ProfileName</div>
+        <div class="panel-body text-center">
+
+            <strong>@Model.ProfileDescription</strong>
+            <br /> <br />
+
+            The profile is:
+            @if(Model.PrivateProfile== true){
+                <text> private</text>
+            }
+            else{
+                <text> public</text>
+            }
+
+            <br/>
+
+            <i class="glyphicon glyphicon-user"></i>
+
+            <strong> @Model.User.UserName</strong>
+            <br/>
+
+            <span style="        background-color: #36b4e8;" class="label label-success">@Model.SignUpDate</span>
+            <br />
+
+            <hr> 
+
+            @if(User.IsInRole("Admin")|| (User.IsInRole("User") && Model.UserId== ViewBag.UserId)){
+
+                <a style="        background-color: #36b4e8; color: black;" class="btn btn-info pull-left" href="/Profiles/Edit/@Model.ProfileId"> Edit Profile</a>
+
+                <form method="post" action="/Profiles/Delete/@Model.ProfileId">
+
+                    <button class="btn btn-outline-danger" type="submit"><i class="bi bi-trash"></i>Delete profile</button>
+
+
+                </form>
+
+                
+            }
+
+
+
+        </div>
+
+
+    </div>
+
+    <br/>
+
+    <h2 class="text-center" style="font-family: 'Audiowide', cursive;">Posts</h2>
+    <br/> 
+
+    foreach( var post in ViewBag.Posts){
+         <div class="panel panel-default GroupPosts">
+            <div class="panel-heading text-center">@post.Title</div>
+            <div class="panel-body text-center">
+                <strong>@post.Content</strong>
+                <br />
+                <span style="background-color: #36b4e8;" class="label label-success">@post.Date</span>
+
+                <br />
+
+
+            </div>
+
+            <div class="panel panel-footer text-center" style="background-color: transparent;">
+                <a style="        background-color: #36b4e8; color: black;" class="btn btn-info btn btn-sm" href="/Posts/Show/@post.Id">See post</a>
+
+
+            </div>
+        </div>
+        <br />
+        <hr />
+    }
+
+
+
+
+}
+else
+{
+    <div class="panel panel-default" style="padding-top: 10px; padding-left: 10px;">
+        <p style="font-family: 'Audiowide', cursive;"> This profile is private </p>
+    </div>
+}

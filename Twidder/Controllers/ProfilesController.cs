@@ -65,10 +65,10 @@ namespace Twidder.Controllers
 
 
             // pt a cauta profilul, se va cauta dupa nume
-            if (Request.Params.Get("search") != null)
+            if (Convert.ToString(HttpContext.Request.Query["search"]) != null)
             {
 
-                search = Request.Params.Get("search").Trim();
+                search = Convert.ToString(HttpContext.Request.Query["search"]).Trim();
 
                 List<int> idProfile = db.Profiles.Where(p => p.ProfileName.Contains(search)).Select(pr => pr.ProfileId).ToList();
 
@@ -79,7 +79,7 @@ namespace Twidder.Controllers
             }
 
             var nr = profile.Count();
-            var currentPage = Convert.ToInt32(Request.Params.Get("page"));
+            var currentPage = Convert.ToInt32(Convert.ToString(HttpContext.Request.Query["page"]));
             var offset = 0;
 
             if (!currentPage.Equals(0))
@@ -121,7 +121,7 @@ namespace Twidder.Controllers
                 ViewBag.DeletedByAdmin = false;
                 db.SaveChanges();
 
-                TempData["warning"] = "O postare a fost staersa din cauza continutului care nu respecta politica aplicatiei!";
+                TempData["warning"] = "O postare a fost stearsa din cauza continutului care nu respecta politica aplicatiei!";
 
                 ViewBag.Warning = TempData["warning"];
             }
@@ -141,7 +141,7 @@ namespace Twidder.Controllers
             }
             if (currentUserProfile.Friends.Contains(user))
             {
-                ViewBag.Friend = true;
+                ViewBag.friend = true;
             }
             if (currentUserid == profile.UserId)
             {
