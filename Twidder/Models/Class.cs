@@ -1,6 +1,6 @@
 ﻿namespace Twidder.Models
 {
-    public class GroupJoinRequest
+    public class Class
     {
     }
 }

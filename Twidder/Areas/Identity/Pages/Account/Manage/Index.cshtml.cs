@@ -214,29 +214,22 @@ namespace Twidder.Areas.Identity.Pages.Account.Manage
 
         }
 
-        /*
-
-       ApplicationDbContext db;
-
-
-       [HttpPost]
-      public ActionResult search(string searchString, ApplicationUser user)
-       {
-           //Lambda Linq to entity does not support Int32
-           //var search = (from d in db.students where d.No == Convert.ToInt32(id) && d.Name == id select d).ToList();
-           //var search = db.students.Where(d => d.No == Convert.ToInt32(id) && d.Name == id).ToList();
-
-           var query = db.Users.AsQueryable();
-
-
-           if (!string.IsNullOrEmpty(searchString))
-               query = query.Where(d => d.FirstName.Contains(searchString));
-
-           var search = query.ToList();
-           //??????????
-           return View(search);
-       }
-      */
+        //fctia de search 
+        public List<ApplicationUser> SearchAccounts(string SearchText)
+        {
+            List<ApplicationUser> result = new List<ApplicationUser>();
+            using (UserContext dc = new UserContext())
+            {
+                IEnumerable<ApplicationUser> accounts = from a in dc.Users
+                                                where (a.FirstName + " " +
+                                                      a.LastName).Contains(SearchText) ||
+                                                    a.Email.Contains(SearchText) 
+                             
+                                                select a;
+                result = accounts.ToList();
+            }
+            return result;
+        }
     }
 
 

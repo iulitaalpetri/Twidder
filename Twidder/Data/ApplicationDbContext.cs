@@ -5,18 +5,40 @@ using Twidder.Models;
 
 namespace Twidder.Data
 {
+
+    
+
+    public class UserContext : DbContext
+    {
+        public DbSet<ApplicationUser> Users { get; internal set; }
+    }
+
+    
+
+
     public class ApplicationDbContext : IdentityDbContext<ApplicationUser>
     {
         public ApplicationDbContext(DbContextOptions<ApplicationDbContext> options)
             : base(options)
         {
         }
+        protected override void OnConfiguring(DbContextOptionsBuilder optionsBuilder)
+        {
+            optionsBuilder.UseSqlServer("Server=YourServer;Database=YourDatabase;Trusted_Connection=True;MultipleActiveResultSets=true");
+        }
 
-        public DbSet<Post> Posts { get; internal set; }
+
+        public DbSet<ApplicationUser> Users { get; internal set; }
         public DbSet<Comment> Comments { get; internal set; }
+        public DbSet<Group> Groups { get; internal set; }
+        public DbSet<Post> Posts { get; internal set; }
 
-        public DbSet<Group> Groups{ get; internal set; }
-        // public DbSet<Profile> Profiles { get; internal set; }
+        public DbSet<Profile> Profiles { get; internal set; }
+
+        public DbSet<Friend> Friends { get; internal set; }
+
+        
+
 
         protected override void OnModelCreating(ModelBuilder builder)
 {
