@@ -3,6 +3,7 @@ using Microsoft.AspNetCore.Identity;
 using Microsoft.AspNetCore.Mvc;
 using Microsoft.AspNetCore.Mvc.Rendering;
 using Microsoft.EntityFrameworkCore;
+using Microsoft.Extensions.Hosting;
 using Twidder.Data;
 using Twidder.Models;
 
@@ -48,24 +49,25 @@ namespace Twidder.Controllers
             return View();
         }
 
-        // Se afiseaza un singur articol in functie de id-ul sau 
-        // impreuna cu categoria din care face parte
-        // In plus sunt preluate si toate comentariile asociate unui articol
-        // HttpGet implicit
+
         public IActionResult Show(int id)
         {
             Post post = db.Posts.Include("User").Include("Comments")
                                  .Where(pst => pst.Id == id)
                                  .First();
-            
 
+            ViewBag.UserCurent = _userManager.GetUserId(User);
+            ViewBag.EsteAdmin = User.IsInRole("Admin");
             return View(post);
         }
 
+
+        
         [HttpPost]
         public IActionResult Show([FromForm] Comment comment)
         {
             comment.Date = DateTime.Now;
+            comment.UserId = _userManager.GetUserId(User);
 
             if (ModelState.IsValid)
             {

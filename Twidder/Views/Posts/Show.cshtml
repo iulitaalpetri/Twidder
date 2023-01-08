@@ -1,7 +1,5 @@
 ﻿@model Twidder.Models.Post
 
-@* Afisarea unui articol impreuna cu categoria din care face *@
-
 @if (TempData["message"] != null)
 {
     <div class="alert @TempData["messageType"]">
@@ -11,30 +9,17 @@
 
 <br />
 
-
-
-    @* 
-    * Mai sus se afla varianta in care se utilizeaza helperul @Html.Partial
-    * Mai jos se afla varianta in care se utilizeaza tagul <partial>*@
-
-    <partial name="PostsInfo" model="Model"></partial> 
-
-    @*
-
-    * Partialul inlocuieste secventa de cod comentata
-    * Secventa a fost mutata in partialul ArticleInfo
-    * Partial care este apelat *@
+@*  <partial name="PostsInfo" model="Model"></partial>*@
 
 
     <div class="card-body">
-
-        
+               
 
         <div class="card-text">@Model.Content</div>
 
         <div class="d-flex justify-content-between flex-row mt-5">
 
-           @* <div><i class="bi bi-globe"></i> @Model.User.FirstName</div>*@
+           <div><i class="bi bi-globe"></i> @Model.User.FirstName</div>
 
             <span class="alert-success">@Model.Date</span>
 
@@ -68,7 +53,7 @@
                 <br>
 
 
-                    @if (comm.User == ViewBag.UserCurent || ViewBag.EsteAdmin)
+                @if (comm.UserId == ViewBag.UserCurent || ViewBag.EsteAdmin)
                     {
 
                         <div class="d-flex">
@@ -126,7 +111,7 @@
                         <label>Continut comentariu</label>
                         <br />
 
-                        <textarea class="form-control" name="Content"></textarea>
+                        <textarea class="form-control" name="Content" required></textarea>
 
                         @Html.ValidationMessage("Content", null, new { @class = "text-danger"})
 

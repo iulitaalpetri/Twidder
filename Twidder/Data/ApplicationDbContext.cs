@@ -5,15 +5,7 @@ using Twidder.Models;
 
 namespace Twidder.Data
 {
-
-    
-
-    public class UserContext : DbContext
-    {
-        public DbSet<ApplicationUser> Users { get; internal set; }
-    }
-
-    
+   
 
 
     public class ApplicationDbContext : IdentityDbContext<ApplicationUser>
@@ -22,10 +14,12 @@ namespace Twidder.Data
             : base(options)
         {
         }
+        /*
         protected override void OnConfiguring(DbContextOptionsBuilder optionsBuilder)
         {
             optionsBuilder.UseSqlServer("Server=YourServer;Database=YourDatabase;Trusted_Connection=True;MultipleActiveResultSets=true");
         }
+        */
 
 
         public DbSet<ApplicationUser> Users { get; internal set; }

@@ -81,7 +81,11 @@ namespace Twidder.Controllers
         public IActionResult Edit(int id)
         {
             Comment comm = db.Comments.Find(id);
+            if(comm == null)
+            {
+                return Redirect("/Posts");
 
+            }
             if (comm.UserId == _userManager.GetUserId(User) || User.IsInRole("Admin"))
             {
                 return View(comm);
@@ -99,6 +103,11 @@ namespace Twidder.Controllers
         public IActionResult Edit(int id, Comment requestComment)
         {
             Comment comm = db.Comments.Find(id);
+            if (comm == null)
+            {
+                return Redirect("/Posts");
+
+            }
 
             if (comm.UserId == _userManager.GetUserId(User) || User.IsInRole("Admin"))
             {

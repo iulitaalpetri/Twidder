@@ -34,7 +34,7 @@ namespace Twidder.Areas.Identity.Pages.Account.Manage
             _userManager = userManager;
             _signInManager = signInManager;
         }
-        
+
 
         /// <summary>
         ///     This API supports the ASP.NET Core Identity default UI infrastructure and is not intended to be used
@@ -58,7 +58,7 @@ namespace Twidder.Areas.Identity.Pages.Account.Manage
         // Limit username changes
         [TempData]
         public string UserNameChangeLimitMessage { get; set; }
-        
+
         [BindProperty]
         public InputModel Input { get; set; }
 
@@ -203,35 +203,19 @@ namespace Twidder.Areas.Identity.Pages.Account.Manage
                 await _userManager.UpdateAsync(user);
 
 
-                
+
             }
 
             await _signInManager.RefreshSignInAsync(user);
             StatusMessage = "Your profile has been updated";
             return RedirectToPage();
 
-            
+
 
         }
 
-        //fctia de search 
-        public List<ApplicationUser> SearchAccounts(string SearchText)
-        {
-            List<ApplicationUser> result = new List<ApplicationUser>();
-            using (UserContext dc = new UserContext())
-            {
-                IEnumerable<ApplicationUser> accounts = from a in dc.Users
-                                                where (a.FirstName + " " +
-                                                      a.LastName).Contains(SearchText) ||
-                                                    a.Email.Contains(SearchText) 
-                             
-                                                select a;
-                result = accounts.ToList();
-            }
-            return result;
-        }
+
     }
-
 
 
 }

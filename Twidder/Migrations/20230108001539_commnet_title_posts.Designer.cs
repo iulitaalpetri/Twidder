@@ -12,8 +12,8 @@ using Twidder.Data;
 namespace Twidder.Migrations
 {
     [DbContext(typeof(ApplicationDbContext))]
-    [Migration("20221217043105_Register2")]
-    partial class Register2
+    [Migration("20230108001539_commnet_title_posts")]
+    partial class commnet_title_posts
     {
         protected override void BuildTargetModel(ModelBuilder modelBuilder)
         {
@@ -24,6 +24,21 @@ namespace Twidder.Migrations
                 .HasAnnotation("Relational:MaxIdentifierLength", 128);
 
             SqlServerModelBuilderExtensions.UseIdentityColumns(modelBuilder, 1L, 1);
+
+            modelBuilder.Entity("ApplicationUserGroup", b =>
+                {
+                    b.Property<int>("GroupsId")
+                        .HasColumnType("int");
+
+                    b.Property<string>("UsersId")
+                        .HasColumnType("nvarchar(450)");
+
+                    b.HasKey("GroupsId", "UsersId");
+
+                    b.HasIndex("UsersId");
+
+                    b.ToTable("ApplicationUserGroup", "Identity");
+                });
 
             modelBuilder.Entity("Microsoft.AspNetCore.Identity.IdentityRole", b =>
                 {
@@ -232,9 +247,6 @@ namespace Twidder.Migrations
                     b.Property<string>("FirstName")
                         .HasColumnType("nvarchar(max)");
 
-                    b.Property<int?>("GroupId")
-                        .HasColumnType("int");
-
                     b.Property<string>("LastName")
                         .HasColumnType("nvarchar(max)");
 
@@ -261,8 +273,17 @@ namespace Twidder.Migrations
                     b.Property<bool>("PhoneNumberConfirmed")
                         .HasColumnType("bit");
 
-                    b.Property<byte[]>("ProfilePicture")
-                        .HasColumnType("varbinary(max)");
+                    b.Property<int?>("ProfileId")
+                        .HasColumnType("int");
+
+                    b.Property<int?>("ProfileId1")
+                        .HasColumnType("int");
+
+                    b.Property<int?>("ProfileId2")
+                        .HasColumnType("int");
+
+                    b.Property<string>("ProfilePictureFilePath")
+                        .HasColumnType("nvarchar(max)");
 
                     b.Property<string>("SecurityStamp")
                         .HasColumnType("nvarchar(max)");
@@ -279,8 +300,6 @@ namespace Twidder.Migrations
 
                     b.HasKey("Id");
 
-                    b.HasIndex("GroupId");
-
                     b.HasIndex("NormalizedEmail")
                         .HasDatabaseName("EmailIndex");
 
@@ -288,6 +307,12 @@ namespace Twidder.Migrations
                         .IsUnique()
                         .HasDatabaseName("UserNameIndex")
                         .HasFilter("[NormalizedUserName] IS NOT NULL");
+
+                    b.HasIndex("ProfileId");
+
+                    b.HasIndex("ProfileId1");
+
+                    b.HasIndex("ProfileId2");
 
                     b.ToTable("AspNetUsers", "Identity");
                 });
@@ -322,6 +347,32 @@ namespace Twidder.Migrations
                     b.ToTable("Comments", "Identity");
                 });
 
+            modelBuilder.Entity("Twidder.Models.Friend", b =>
+                {
+                    b.Property<int>("id")
+                        .ValueGeneratedOnAdd()
+                        .HasColumnType("int");
+
+                    SqlServerPropertyBuilderExtensions.UseIdentityColumn(b.Property<int>("id"), 1L, 1);
+
+                    b.Property<int>("FriendshipId")
+                        .HasColumnType("int");
+
+                    b.Property<string>("User1_Id")
+                        .HasColumnType("nvarchar(450)");
+
+                    b.Property<string>("User2_Id")
+                        .HasColumnType("nvarchar(450)");
+
+                    b.HasKey("id");
+
+                    b.HasIndex("User1_Id");
+
+                    b.HasIndex("User2_Id");
+
+                    b.ToTable("Friends", "Identity");
+                });
+
             modelBuilder.Entity("Twidder.Models.Group", b =>
                 {
                     b.Property<int>("Id")
@@ -330,11 +381,25 @@ namespace Twidder.Migrations
 
                     SqlServerPropertyBuilderExtensions.UseIdentityColumn(b.Property<int>("Id"), 1L, 1);
 
+                    b.Property<string>("CreatorId")
+                        .IsRequired()
+                        .HasColumnType("nvarchar(max)");
+
+                    b.Property<string>("GroupDescription")
+                        .IsRequired()
+                        .HasMaxLength(30)
+                        .HasColumnType("nvarchar(30)");
+
                     b.Property<string>("GroupName")
                         .IsRequired()
                         .HasColumnType("nvarchar(max)");
 
+                    b.Property<int?>("ProfileId")
+                        .HasColumnType("int");
+
                     b.HasKey("Id");
+
+                    b.HasIndex("ProfileId");
 
                     b.ToTable("Groups", "Identity");
                 });
@@ -355,14 +420,79 @@ namespace Twidder.Migrations
                     b.Property<DateTime>("Date")
                         .HasColumnType("datetime2");
 
+                    b.Property<int?>("GroupId")
+                        .HasColumnType("int");
+
+                    b.Property<int?>("ProfileId")
+                        .HasColumnType("int");
+
                     b.Property<string>("UserId")
                         .HasColumnType("nvarchar(450)");
 
                     b.HasKey("Id");
 
+                    b.HasIndex("GroupId");
+
+                    b.HasIndex("ProfileId");
+
                     b.HasIndex("UserId");
 
                     b.ToTable("Posts", "Identity");
+                });
+
+            modelBuilder.Entity("Twidder.Models.Profile", b =>
+                {
+                    b.Property<int>("ProfileId")
+                        .ValueGeneratedOnAdd()
+                        .HasColumnType("int");
+
+                    SqlServerPropertyBuilderExtensions.UseIdentityColumn(b.Property<int>("ProfileId"), 1L, 1);
+
+                    b.Property<bool>("DeletedByAdmin")
+                        .HasColumnType("bit");
+
+                    b.Property<bool>("PrivateProfile")
+                        .HasColumnType("bit");
+
+                    b.Property<string>("ProfileDescription")
+                        .IsRequired()
+                        .HasColumnType("nvarchar(max)");
+
+                    b.Property<string>("ProfileName")
+                        .IsRequired()
+                        .HasMaxLength(30)
+                        .HasColumnType("nvarchar(30)");
+
+                    b.Property<string>("ProfilePicture")
+                        .HasColumnType("nvarchar(max)");
+
+                    b.Property<DateTime>("SignUpDate")
+                        .HasColumnType("datetime2");
+
+                    b.Property<string>("UserId")
+                        .IsRequired()
+                        .HasColumnType("nvarchar(450)");
+
+                    b.HasKey("ProfileId");
+
+                    b.HasIndex("UserId");
+
+                    b.ToTable("Profiles", "Identity");
+                });
+
+            modelBuilder.Entity("ApplicationUserGroup", b =>
+                {
+                    b.HasOne("Twidder.Models.Group", null)
+                        .WithMany()
+                        .HasForeignKey("GroupsId")
+                        .OnDelete(DeleteBehavior.Cascade)
+                        .IsRequired();
+
+                    b.HasOne("Twidder.Models.ApplicationUser", null)
+                        .WithMany()
+                        .HasForeignKey("UsersId")
+                        .OnDelete(DeleteBehavior.Cascade)
+                        .IsRequired();
                 });
 
             modelBuilder.Entity("Microsoft.AspNetCore.Identity.IdentityRoleClaim<string>", b =>
@@ -418,9 +548,17 @@ namespace Twidder.Migrations
 
             modelBuilder.Entity("Twidder.Models.ApplicationUser", b =>
                 {
-                    b.HasOne("Twidder.Models.Group", null)
-                        .WithMany("ApplicationUser")
-                        .HasForeignKey("GroupId");
+                    b.HasOne("Twidder.Models.Profile", null)
+                        .WithMany("Friends")
+                        .HasForeignKey("ProfileId");
+
+                    b.HasOne("Twidder.Models.Profile", null)
+                        .WithMany("ReceivedFriends")
+                        .HasForeignKey("ProfileId1");
+
+                    b.HasOne("Twidder.Models.Profile", null)
+                        .WithMany("SentFriends")
+                        .HasForeignKey("ProfileId2");
                 });
 
             modelBuilder.Entity("Twidder.Models.Comment", b =>
@@ -438,23 +576,81 @@ namespace Twidder.Migrations
                     b.Navigation("User");
                 });
 
+            modelBuilder.Entity("Twidder.Models.Friend", b =>
+                {
+                    b.HasOne("Twidder.Models.ApplicationUser", "User1")
+                        .WithMany()
+                        .HasForeignKey("User1_Id");
+
+                    b.HasOne("Twidder.Models.ApplicationUser", "User2")
+                        .WithMany()
+                        .HasForeignKey("User2_Id");
+
+                    b.Navigation("User1");
+
+                    b.Navigation("User2");
+                });
+
+            modelBuilder.Entity("Twidder.Models.Group", b =>
+                {
+                    b.HasOne("Twidder.Models.Profile", null)
+                        .WithMany("Groups")
+                        .HasForeignKey("ProfileId");
+                });
+
             modelBuilder.Entity("Twidder.Models.Post", b =>
                 {
+                    b.HasOne("Twidder.Models.Group", "Group")
+                        .WithMany("Posts")
+                        .HasForeignKey("GroupId");
+
+                    b.HasOne("Twidder.Models.Profile", "Profile")
+                        .WithMany("Posts")
+                        .HasForeignKey("ProfileId");
+
                     b.HasOne("Twidder.Models.ApplicationUser", "User")
                         .WithMany()
                         .HasForeignKey("UserId");
+
+                    b.Navigation("Group");
+
+                    b.Navigation("Profile");
+
+                    b.Navigation("User");
+                });
+
+            modelBuilder.Entity("Twidder.Models.Profile", b =>
+                {
+                    b.HasOne("Twidder.Models.ApplicationUser", "User")
+                        .WithMany()
+                        .HasForeignKey("UserId")
+                        .OnDelete(DeleteBehavior.Cascade)
+                        .IsRequired();
 
                     b.Navigation("User");
                 });
 
             modelBuilder.Entity("Twidder.Models.Group", b =>
                 {
-                    b.Navigation("ApplicationUser");
+                    b.Navigation("Posts");
                 });
 
             modelBuilder.Entity("Twidder.Models.Post", b =>
                 {
                     b.Navigation("Comments");
+                });
+
+            modelBuilder.Entity("Twidder.Models.Profile", b =>
+                {
+                    b.Navigation("Friends");
+
+                    b.Navigation("Groups");
+
+                    b.Navigation("Posts");
+
+                    b.Navigation("ReceivedFriends");
+
+                    b.Navigation("SentFriends");
                 });
 #pragma warning restore 612, 618
         }

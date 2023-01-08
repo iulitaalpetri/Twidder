@@ -53,6 +53,7 @@ namespace Twidder.Models
                     NormalizedEmail = "ADMIN@TEST.COM",
                     EmailConfirmed = true,
                     PhoneNumberConfirmed = true,
+                    ProfilePictureFilePath = "wwwroot/upload/bpet0lwj.n32download.png",
                     PasswordHash = hasher.HashPassword(null, "Admin1!")
                 },
                             new ApplicationUser
@@ -66,6 +67,7 @@ namespace Twidder.Models
                                 NormalizedEmail = "user1@TEST.COM",
                                 EmailConfirmed = true,
                                 PhoneNumberConfirmed = true,
+                                ProfilePictureFilePath = "wwwroot/upload/bpet0lwj.n32download.png",
                                 PasswordHash = hasher.HashPassword(null, "Admin21!")
                             }
 
