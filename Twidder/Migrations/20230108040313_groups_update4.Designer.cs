@@ -12,8 +12,8 @@ using Twidder.Data;
 namespace Twidder.Migrations
 {
     [DbContext(typeof(ApplicationDbContext))]
-    [Migration("20230107234341_tabele")]
-    partial class tabele
+    [Migration("20230108040313_groups_update4")]
+    partial class groups_update4
     {
         protected override void BuildTargetModel(ModelBuilder modelBuilder)
         {
@@ -394,12 +394,7 @@ namespace Twidder.Migrations
                         .IsRequired()
                         .HasColumnType("nvarchar(max)");
 
-                    b.Property<int?>("ProfileId")
-                        .HasColumnType("int");
-
                     b.HasKey("Id");
-
-                    b.HasIndex("ProfileId");
 
                     b.ToTable("Groups", "Identity");
                 });
@@ -420,16 +415,11 @@ namespace Twidder.Migrations
                     b.Property<DateTime>("Date")
                         .HasColumnType("datetime2");
 
-                    b.Property<int>("GroupId")
+                    b.Property<int?>("GroupId")
                         .HasColumnType("int");
 
-                    b.Property<int>("ProfileId")
+                    b.Property<int?>("ProfileId")
                         .HasColumnType("int");
-
-                    b.Property<string>("Title")
-                        .IsRequired()
-                        .HasMaxLength(40)
-                        .HasColumnType("nvarchar(40)");
 
                     b.Property<string>("UserId")
                         .HasColumnType("nvarchar(450)");
@@ -596,26 +586,15 @@ namespace Twidder.Migrations
                     b.Navigation("User2");
                 });
 
-            modelBuilder.Entity("Twidder.Models.Group", b =>
-                {
-                    b.HasOne("Twidder.Models.Profile", null)
-                        .WithMany("Groups")
-                        .HasForeignKey("ProfileId");
-                });
-
             modelBuilder.Entity("Twidder.Models.Post", b =>
                 {
                     b.HasOne("Twidder.Models.Group", "Group")
                         .WithMany("Posts")
-                        .HasForeignKey("GroupId")
-                        .OnDelete(DeleteBehavior.Cascade)
-                        .IsRequired();
+                        .HasForeignKey("GroupId");
 
                     b.HasOne("Twidder.Models.Profile", "Profile")
                         .WithMany("Posts")
-                        .HasForeignKey("ProfileId")
-                        .OnDelete(DeleteBehavior.Cascade)
-                        .IsRequired();
+                        .HasForeignKey("ProfileId");
 
                     b.HasOne("Twidder.Models.ApplicationUser", "User")
                         .WithMany()
@@ -652,8 +631,6 @@ namespace Twidder.Migrations
             modelBuilder.Entity("Twidder.Models.Profile", b =>
                 {
                     b.Navigation("Friends");
-
-                    b.Navigation("Groups");
 
                     b.Navigation("Posts");
 

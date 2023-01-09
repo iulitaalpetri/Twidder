@@ -392,12 +392,7 @@ namespace Twidder.Migrations
                         .IsRequired()
                         .HasColumnType("nvarchar(max)");
 
-                    b.Property<int?>("ProfileId")
-                        .HasColumnType("int");
-
                     b.HasKey("Id");
-
-                    b.HasIndex("ProfileId");
 
                     b.ToTable("Groups", "Identity");
                 });
@@ -589,13 +584,6 @@ namespace Twidder.Migrations
                     b.Navigation("User2");
                 });
 
-            modelBuilder.Entity("Twidder.Models.Group", b =>
-                {
-                    b.HasOne("Twidder.Models.Profile", null)
-                        .WithMany("Groups")
-                        .HasForeignKey("ProfileId");
-                });
-
             modelBuilder.Entity("Twidder.Models.Post", b =>
                 {
                     b.HasOne("Twidder.Models.Group", "Group")
@@ -641,8 +629,6 @@ namespace Twidder.Migrations
             modelBuilder.Entity("Twidder.Models.Profile", b =>
                 {
                     b.Navigation("Friends");
-
-                    b.Navigation("Groups");
 
                     b.Navigation("Posts");
 

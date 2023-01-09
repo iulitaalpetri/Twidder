@@ -1,28 +1,44 @@
 ﻿using Microsoft.AspNetCore.Mvc;
 using Microsoft.EntityFrameworkCore;
+using Microsoft.AspNetCore.Authorization;
+using Microsoft.AspNetCore.Identity;
+using Microsoft.AspNetCore.Mvc;
+using Microsoft.AspNetCore.Mvc.Rendering;
+using Microsoft.EntityFrameworkCore;
+using Microsoft.Extensions.Hosting;
 using Twidder.Data;
 using Twidder.Models;
-
 namespace Twidder.Controllers
 {
 
-   
+
+    [Authorize]
     public class GroupsController : Controller
     {
-
         private readonly ApplicationDbContext db;
 
-        public GroupsController(ApplicationDbContext context)
+        private readonly UserManager<ApplicationUser> _userManager;
+
+        private readonly RoleManager<IdentityRole> _roleManager;
+
+        public GroupsController(ApplicationDbContext context,
+            UserManager<ApplicationUser> userManager,
+            RoleManager<IdentityRole> roleManager)
         {
             db = context;
+
+            _userManager = userManager;
+
+            _roleManager = roleManager;
         }
 
-
-        public ActionResult Index()
+        // afiseaza grupuri
+        [Authorize(Roles = "User,Admin")]
+        public IActionResult Index()
         {
             var groups = db.Groups;
             ViewBag.Groups = groups;
-            //ViewBag.CurrentUser = db.Users.Find(User.Identity.GetUserId());
+            ViewBag.CurrentUser = db.Users.Find(_userManager.GetUserId(User));
             if (TempData.ContainsKey("message"))
             {
                 ViewBag.Message = TempData["message"];
@@ -30,15 +46,104 @@ namespace Twidder.Controllers
             return View();
         }
 
+        [Authorize(Roles = "User,Admin")]
+        public IActionResult New()
+        {
+            Group grup = new Group();
+            grup.CreatorId = _userManager.GetUserId(User).ToString();
+            db.SaveChanges();
 
 
+            return View(grup);
+        }
+
+        // creeaza grup nou
+
+        [HttpPost]
+        [Authorize(Roles = "User,Admin")]
+        public IActionResult New(Group grup)
+        {
+            if (_userManager.GetUserId(User) == null)
+                return RedirectToAction("Index");
+
+
+            // iau ID-ul userului care creeaza grupul
+            grup.CreatorId = _userManager.GetUserId(User);
+
+            try
+            {
+                if (ModelState.IsValid)
+                {
+                    db.Groups.Add(grup);
+                    db.SaveChanges();
+                    // adauga creatorul ca membru al grupului
+                    ApplicationUser user = db.Users.Find(_userManager.GetUserId(User));
+                    grup.Users.Add(user);
+
+                    //adauga grupul crea la grupurile userului
+                    user.Groups.Add(grup);
+
+                    db.SaveChanges();
+                    TempData["message"] = "Grupul a fost adaugat cu succes!";
+                    return RedirectToAction("Index");
+                }
+                else
+                {
+                    return View(grup);
+                }
+            }
+            catch (Exception e)
+            {
+                return View(grup);
+            }
+
+        }
+
+
+        public IActionResult Show(int id)
+        {
+            Group grup = db.Groups.Include("Users").Include("Posts")
+                                 .Where(grup => grup.Id == id)
+                                 .First();
+
+            ViewBag.UserCurent = _userManager.GetUserId(User);
+            ViewBag.EsteAdmin = User.IsInRole("Admin");
+            return View(grup);
+        }
+
+
+
+        [HttpPost]
+        public IActionResult Show([FromForm] Post post)
+        {
+            post.Date = DateTime.Now;
+            post.UserId = _userManager.GetUserId(User);
+
+            if (ModelState.IsValid)
+            {
+                db.Posts.Add(post);
+                db.SaveChanges();
+                return Redirect("/Posts/Show/" + post.Id);
+            }
+
+            else
+            {
+                Group grup = db.Groups.Include("User").Include("Posts")
+                               .Where(grup => grup.Id == post.Id)
+                               .First();
+
+
+
+                return View(grup);
+            }
+        }
         /*
 
 
 
         public ActionResult Index()
 
-            
+
         {
             var groups = db.Groups.Include("User");
 
@@ -50,7 +155,7 @@ namespace Twidder.Controllers
                 ViewBag.message = TempData["message"].ToString();
             }
 
-            
+
             return View();
         }
 
@@ -65,22 +170,7 @@ namespace Twidder.Controllers
             return View();
         }
 
-        [HttpPost]
-        public ActionResult New(Group grp)
-        {
-            if (ModelState.IsValid)
-            {
-                db.Groups.Add(grp);
-                db.SaveChanges();
-                TempData["message"] = "Grupul a fost adaugat";
-                return RedirectToAction("Index");
-            }
 
-            else
-            {
-                return View(grp);
-            }
-        }
 
         public ActionResult Edit(int id)
         {
@@ -117,6 +207,7 @@ namespace Twidder.Controllers
             return RedirectToAction("Index");
         }
         */
-        
+
+
     }
 }

@@ -1,4 +1,4 @@
-﻿model Twidder.Models.Group
+﻿
 @{
     ViewBag.Title = "Afisare grup";
 }
@@ -18,9 +18,143 @@
 
 </form>
 <br />
-<a class="btn alert-success" href="/Categories/Index/">Afisare lista grupuri</a>
+<a class="btn alert-success" href="/Groups/Index/">Afisare lista grupuri</a>
 
 <br />
 <hr />
 <br />
 
+@model Twidder.Models.Group
+
+@if (TempData["message"] != null)
+{
+    <div class="alert @TempData["messageType"]">
+        @TempData["message"]
+    </div>
+}
+
+<br />
+
+@*  <partial name="PostsInfo" model="Model"></partial>*@
+
+
+<div class="card-body">
+
+
+    <div class="card-text">@Model.GroupName</div>
+
+    <div class="d-flex justify-content-between flex-row mt-5">
+
+        <div><i class="bi bi-globe"></i> @Model.CreatorId</div>
+
+        @* <span class="alert-success">@Model.Date</span>*@
+
+    </div>
+
+</div>
+
+
+
+<br />
+<br />
+
+@* Afisare postarile impreuna cu butoanele de editare si stergere *@
+
+
+@foreach (var post in Model.Posts)
+{
+    <div class="container">
+        <div class="row">
+            <div class="col-md-2"></div>
+
+            <div class="col-md-8">
+
+                <div>
+
+                    <p>@post.Content</p>
+                    <small>@post.Date</small>
+                    <strong><i class="bi bi-person"></i>@post.User.UserName</strong>
+
+                </div>
+                <br>
+
+                @*daca userul curent este autorul postarii sau este admin, atunci poate edita/sterge postarea*@
+                @if (post.UserId == ViewBag.UserCurent || ViewBag.EsteAdmin)
+                {
+
+                    <div class="d-flex">
+
+                        <div>
+
+                            <a class="btn btn-outline-primary" href="/Comments/Edit/@post.Id"><i class="bi bi-pencil-square"></i>Editeaza</a>
+
+                        </div>
+
+                        <div>
+
+                            <form method="post" action="/Comments/Delete/@post.Id">
+
+                                <button class="btn btn-outline-danger" type="submit"><i class="bi bi-trash"></i>Sterge</button>
+
+                            </form>
+
+                        </div>
+
+                    </div>
+                }
+
+                <br />
+
+            </div>
+
+            <div class="col-md-2"></div>
+
+        </div>
+
+    </div>
+}
+
+
+
+@* Afisarea formularului in care se poate adauga o postare *@
+
+<div class="container">
+
+    <div class="row">
+
+        <div class="col-md-2"></div>
+
+        <div class="col-md-8">
+
+            <div class="card">
+
+                <form method="group" action="/Groups/Show/@Model.Id">
+
+                    <div class="card-body">
+
+                        <input type="hidden" name="GroupId" value="@Model.Id" />
+
+                        <label>Continut postare</label>
+                        <br />
+
+                        <textarea class="form-control" name="Content" required></textarea>
+
+                        @Html.ValidationMessage("Content", null, new { @class = "text-danger"})
+
+                        <br /><br />
+
+                        <button class="btn btn-success " type="submit">Adauga postarea</button>
+
+                    </div>
+
+                </form>
+
+            </div>
+
+        </div>
+
+        <div class="col-md-2"></div>
+
+    </div>
+
+</div>

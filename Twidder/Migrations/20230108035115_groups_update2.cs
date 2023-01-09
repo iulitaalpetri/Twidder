@@ -5,12 +5,28 @@ using Microsoft.EntityFrameworkCore.Migrations;
 
 namespace Twidder.Migrations
 {
-    public partial class tabele : Migration
+    public partial class groups_update2 : Migration
     {
         protected override void Up(MigrationBuilder migrationBuilder)
         {
             migrationBuilder.EnsureSchema(
                 name: "Identity");
+
+            migrationBuilder.CreateTable(
+                name: "Groups",
+                schema: "Identity",
+                columns: table => new
+                {
+                    Id = table.Column<int>(type: "int", nullable: false)
+                        .Annotation("SqlServer:Identity", "1, 1"),
+                    GroupName = table.Column<string>(type: "nvarchar(max)", nullable: false),
+                    GroupDescription = table.Column<string>(type: "nvarchar(30)", maxLength: 30, nullable: false),
+                    CreatorId = table.Column<string>(type: "nvarchar(max)", nullable: false)
+                },
+                constraints: table =>
+                {
+                    table.PrimaryKey("PK_Groups", x => x.Id);
+                });
 
             migrationBuilder.CreateTable(
                 name: "Role",
@@ -87,6 +103,13 @@ namespace Twidder.Migrations
                 constraints: table =>
                 {
                     table.PrimaryKey("PK_ApplicationUserGroup", x => new { x.GroupsId, x.UsersId });
+                    table.ForeignKey(
+                        name: "FK_ApplicationUserGroup_Groups_GroupsId",
+                        column: x => x.GroupsId,
+                        principalSchema: "Identity",
+                        principalTable: "Groups",
+                        principalColumn: "Id",
+                        onDelete: ReferentialAction.Cascade);
                 });
 
             migrationBuilder.CreateTable(
@@ -272,41 +295,17 @@ namespace Twidder.Migrations
                 });
 
             migrationBuilder.CreateTable(
-                name: "Groups",
-                schema: "Identity",
-                columns: table => new
-                {
-                    Id = table.Column<int>(type: "int", nullable: false)
-                        .Annotation("SqlServer:Identity", "1, 1"),
-                    GroupName = table.Column<string>(type: "nvarchar(max)", nullable: false),
-                    GroupDescription = table.Column<string>(type: "nvarchar(30)", maxLength: 30, nullable: false),
-                    CreatorId = table.Column<string>(type: "nvarchar(max)", nullable: false),
-                    ProfileId = table.Column<int>(type: "int", nullable: true)
-                },
-                constraints: table =>
-                {
-                    table.PrimaryKey("PK_Groups", x => x.Id);
-                    table.ForeignKey(
-                        name: "FK_Groups_Profiles_ProfileId",
-                        column: x => x.ProfileId,
-                        principalSchema: "Identity",
-                        principalTable: "Profiles",
-                        principalColumn: "ProfileId");
-                });
-
-            migrationBuilder.CreateTable(
                 name: "Posts",
                 schema: "Identity",
                 columns: table => new
                 {
                     Id = table.Column<int>(type: "int", nullable: false)
                         .Annotation("SqlServer:Identity", "1, 1"),
-                    Title = table.Column<string>(type: "nvarchar(40)", maxLength: 40, nullable: false),
                     Content = table.Column<string>(type: "nvarchar(100)", maxLength: 100, nullable: false),
                     Date = table.Column<DateTime>(type: "datetime2", nullable: false),
                     UserId = table.Column<string>(type: "nvarchar(450)", nullable: true),
-                    GroupId = table.Column<int>(type: "int", nullable: false),
-                    ProfileId = table.Column<int>(type: "int", nullable: false)
+                    GroupId = table.Column<int>(type: "int", nullable: true),
+                    ProfileId = table.Column<int>(type: "int", nullable: true)
                 },
                 constraints: table =>
                 {
@@ -322,15 +321,13 @@ namespace Twidder.Migrations
                         column: x => x.GroupId,
                         principalSchema: "Identity",
                         principalTable: "Groups",
-                        principalColumn: "Id",
-                        onDelete: ReferentialAction.Cascade);
+                        principalColumn: "Id");
                     table.ForeignKey(
                         name: "FK_Posts_Profiles_ProfileId",
                         column: x => x.ProfileId,
                         principalSchema: "Identity",
                         principalTable: "Profiles",
-                        principalColumn: "ProfileId",
-                        onDelete: ReferentialAction.Cascade);
+                        principalColumn: "ProfileId");
                 });
 
             migrationBuilder.CreateTable(
@@ -425,12 +422,6 @@ namespace Twidder.Migrations
                 column: "User2_Id");
 
             migrationBuilder.CreateIndex(
-                name: "IX_Groups_ProfileId",
-                schema: "Identity",
-                table: "Groups",
-                column: "ProfileId");
-
-            migrationBuilder.CreateIndex(
                 name: "IX_Posts_GroupId",
                 schema: "Identity",
                 table: "Posts",
@@ -493,16 +484,6 @@ namespace Twidder.Migrations
                 column: "UsersId",
                 principalSchema: "Identity",
                 principalTable: "AspNetUsers",
-                principalColumn: "Id",
-                onDelete: ReferentialAction.Cascade);
-
-            migrationBuilder.AddForeignKey(
-                name: "FK_ApplicationUserGroup_Groups_GroupsId",
-                schema: "Identity",
-                table: "ApplicationUserGroup",
-                column: "GroupsId",
-                principalSchema: "Identity",
-                principalTable: "Groups",
                 principalColumn: "Id",
                 onDelete: ReferentialAction.Cascade);
 
