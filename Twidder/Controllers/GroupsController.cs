@@ -39,6 +39,7 @@ namespace Twidder.Controllers
             var groups = db.Groups;
             ViewBag.Groups = groups;
             ViewBag.CurrentUser = db.Users.Find(_userManager.GetUserId(User));
+            ViewBag.EsteAdmin = User.IsInRole("Admin");
             if (TempData.ContainsKey("message"))
             {
                 ViewBag.Message = TempData["message"];
@@ -136,6 +137,51 @@ namespace Twidder.Controllers
 
                 return View(grup);
             }
+        }
+
+
+        // Editare grup
+        public IActionResult Edit(int id)
+        {
+
+            Group grup = db.Groups.Include("User")
+                                        .Where(grup => grup.Id == id)
+                                        .First();
+
+            return View();
+
+        }
+
+        // Se adauga grupul modificat in baza de date
+        [HttpPost]
+        public IActionResult Edit(int id, Group requestGroup)
+        {
+            Group grup = db.Groups.Find(id);
+
+            if (ModelState.IsValid)
+            {
+
+                grup.GroupName = requestGroup.GroupName;
+                grup.GroupDescription = requestGroup.GroupDescription;
+                TempData["message"] = "Grupul a fost modificat";
+                db.SaveChanges();
+                return RedirectToAction("Index");
+            }
+            else
+            {
+                return View(requestGroup);
+            }
+        }
+
+        // Stergerea unui grup
+        [HttpPost]
+        public ActionResult Delete(int id)
+        {
+            Group group = db.Groups.Find(id);
+            db.Groups.Remove(group);
+            TempData["message"] = "Grupul a fost sters!";
+            db.SaveChanges();
+            return RedirectToAction("Index");
         }
         /*
 

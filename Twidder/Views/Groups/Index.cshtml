@@ -2,30 +2,68 @@
 @{
     ViewBag.Title = "Index";
 }
-<div class="IndexMessage text-center container">
-    <h1>@ViewBag.Message</h1>
-    <h2> Grupuri </h2>
-    <a class="btn btn-primary" href="/Groups/New" ">Creeaza un grup</a>
-    <br />
-    <br />
-</div>
-<div class="containerGroups">
-    @foreach (var group in ViewBag.Groups)
-    {
-        <div class="containerPanel">
-            <div class="panel panel-default panelGroup">
-                <div class="panelHeader panel-heading">@group.GroupName</div>
-                <div class="panel-body">
-                    <br />
-                    <strong>@group.GroupDescription</strong>
-                    <br />
-                </div>
 
-                <div class="panel panel-footer panelFooter">
-                    <a class="btn btn-success btn"  href="/Groups/Show/@group.Id">Afisare grup</a>
-                </div>
+<h2 class="text-center">Grupuri</h2>
+<br />
+
+@if(ViewBag.Message != null){
+    <h2 class="alert-success p-3 rounded-3 text-center mb-5">@ViewBag.Message</h2>
+}
+
+<div class="d-flex justify-content-center">
+
+    <a class="btn btn-outline-success" href="/Groups/New/">Creeaza grup!</a>
+    <br />
+    <a class="btn btn-outline-success" href="/Posts/New">Creeaza postare!</a>
+    <br />
+
+</div>
+
+<br />
+
+
+@foreach (var group in ViewBag.Groups)
+{
+    <div class="card">
+
+        <div class="card-body">
+
+            <h5 class="card-title">@group.GroupName</h5>
+
+            <div class="d-flex justify-content-between flex-row mt-5">
+                <div><i class="card-text"></i> @group.GroupDescription</div>
+                <a class="btn btn-success" href="/Groups/Show/@group.Id">Afisare grup</a>
+
+                @if (group.CreatorId == ViewBag.UserCurent || ViewBag.EsteAdmin)
+                    {
+                       <div class="d-flex">
+
+                            <div>
+
+                                <a class="btn btn-outline-primary" href="/Groups/Edit/@group.Id"><i class="bi bi-pencil-square"></i>Editeaza</a>
+
+                            </div>
+
+                            <div>
+
+                                <form method="post" action="/Groups/Delete/@group.Id">
+
+                                    <button class="btn btn-outline-danger" type="submit"><i class="bi bi-trash"></i>Sterge</button>
+
+                                </form>
+
+                            </div>
+
+                        </div>
+                    }
             </div>
+
         </div>
 
-    }
-</div>
+    </div>
+
+    <br />
+    <br />
+}
+
+

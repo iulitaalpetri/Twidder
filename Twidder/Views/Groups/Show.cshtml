@@ -11,12 +11,6 @@
 
 <p>@Model.GroupName</p>
 
-
-<form method="post" action="/Groups/Delete/@Model.Id">
-
-    <button class="btn btn-danger" type="submit">Sterge grupul</button>
-
-</form>
 <br />
 <a class="btn alert-success" href="/Groups/Index/">Afisare lista grupuri</a>
 
@@ -48,6 +42,10 @@
         <div><i class="bi bi-globe"></i> @Model.CreatorId</div>
 
         @* <span class="alert-success">@Model.Date</span>*@
+        @foreach (var user in Model.Users)
+                    {
+                        <strong><i class="bi bi-person"></i>@user.UserName</strong>
+                    }
 
     </div>
 
@@ -73,6 +71,7 @@
 
                     <p>@post.Content</p>
                     <small>@post.Date</small>
+{
                     <strong><i class="bi bi-person"></i>@post.User.UserName</strong>
 
                 </div>
@@ -86,13 +85,13 @@
 
                         <div>
 
-                            <a class="btn btn-outline-primary" href="/Comments/Edit/@post.Id"><i class="bi bi-pencil-square"></i>Editeaza</a>
+                            <a class="btn btn-outline-primary" href="/Posts/Edit/@post.Id"><i class="bi bi-pencil-square"></i>Editeaza</a>
 
                         </div>
 
                         <div>
 
-                            <form method="post" action="/Comments/Delete/@post.Id">
+                            <form method="post" action="/Posts/Delete/@post.Id">
 
                                 <button class="btn btn-outline-danger" type="submit"><i class="bi bi-trash"></i>Sterge</button>
 
@@ -118,43 +117,38 @@
 
 @* Afisarea formularului in care se poate adauga o postare *@
 
-<div class="container">
-
+@*<div class="container">*@
+<h2 class="text-center mt-5">Adaugare postare</h2>
+<br />
+<div class="container mt-5">
     <div class="row">
+        <div class="col-6 offset-3">
 
-        <div class="col-md-2"></div>
+            @using (Html.BeginForm(actionName: "New", controllerName: "Posts",
+            method: FormMethod.Post))
+            {
 
-        <div class="col-md-8">
+                @Html.ValidationSummary(false, "", new { @class = "text-danger" })
 
-            <div class="card">
+                <br />
 
-                <form method="group" action="/Groups/Show/@Model.Id">
+                @Html.Label("Content", "Continut Postare")
+                <br />
+                @Html.TextArea("Content", null, new { @class = "form-control" })
 
-                    <div class="card-body">
+                @Html.ValidationMessage("Content", null, new { @class = "text-danger" })
+                <br />
 
-                        <input type="hidden" name="GroupId" value="@Model.Id" />
+                <br />
 
-                        <label>Continut postare</label>
-                        <br />
 
-                        <textarea class="form-control" name="Content" required></textarea>
+                <br />
 
-                        @Html.ValidationMessage("Content", null, new { @class = "text-danger"})
+                <button class="btn btn-success" type="submit">Adauga postare</button>
 
-                        <br /><br />
-
-                        <button class="btn btn-success " type="submit">Adauga postarea</button>
-
-                    </div>
-
-                </form>
-
-            </div>
+            }
 
         </div>
-
-        <div class="col-md-2"></div>
-
     </div>
-
 </div>
+
