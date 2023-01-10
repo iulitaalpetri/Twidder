@@ -7,7 +7,7 @@
 @{
     ViewBag.Title = "Show profile";
 }
-<a style="background-color:aliceblue" class="btn btn-info" href="/Profiles/Index">Return to profiles</a>
+<a style="background-color:aliceblue" class="btn btn-info" href="/ApplicationUsers/Index">Return to profiles</a>
 </br>
 </br>
 
@@ -42,19 +42,19 @@
     }
     else
     {
-        <a class="btn btn-info" href="/Profiles/SendRequest/@Model.Id">Add friend</a>
+        <a class="btn btn-info" href="/ApplicationUsers/SendRequest/@Model.Id">Add friend</a>
     }
 }
 
 
-@if ((User.IsInRole("Admin") || Model.Id == ViewBag.UserId) || Model.PrivateProfile == false)
+@if ((User.IsInRole("Admin") || Model.Id == ViewBag.Id) || Model.PrivateProfile == false)
 {
 
     <div class="divButoane container text-center">
 
         @if (User.IsInRole("Admin"))
         {
-            <a style="        background-color: #36b4e8; color: black;" class="btn btn-info" href="/Profiles/New">Add profile</a>
+            <a style="        background-color: #36b4e8; color: black;" class="btn btn-info" href="/ApplicationUsers/New">Add profile</a>
         }
 
 
@@ -73,7 +73,7 @@
         else if (ViewBag.sameUser == true)
         {
 
-            <a style="        background-color: #36b4e8; color: black;" class="btn btn-info" href="/Profiles/FriendRequests/@Model.Id">Friend Requests</a>
+            <a style="        background-color: #36b4e8; color: black;" class="btn btn-info" href="/ApplicationUsers/FriendRequests/@Model.Id">Friend Requests</a>
         }
         else if (ViewBag.nobutton == true)
         {
@@ -81,15 +81,15 @@
         }
         else
         {
-            <a class="btn btn-info" href="/Profiles/SendRequest/@Model.Id">Add friend </a>
+            <a class="btn btn-info" href="/ApplicationUsers/SendRequest/@Model.Id">Add friend </a>
         }
 
 
 
 
-        <a style="        background-color: #36b4e8; color: black;" class="btn btn-info" href="/Profiles/Friends/@Model.Id">Friends</a>
+        <a style="        background-color: #36b4e8; color: black;" class="btn btn-info" href="/ApplicationUsers/Friends/@Model.Id">Friends</a>
 
-        <a style="        background-color: #36b4e8; color: black;" class="btn btn-info" href="/Profiles/JoinedGroups/@Model.Id">Groups</a>
+        <a style="        background-color: #36b4e8; color: black;" class="btn btn-info" href="/ApplicationUsers/JoinedGroups/@Model.Id">Groups</a>
 
 
     </div>
@@ -127,9 +127,9 @@
             @if (User.IsInRole("Admin") || (User.IsInRole("User") && Model.Id == ViewBag.UserId))
             {
 
-                <a style="        background-color: #36b4e8; color: black;" class="btn btn-info pull-left" href="/Profiles/Edit/@Model.Id"> Edit Profile</a>
+                <a style="        background-color: #36b4e8; color: black;" class="btn btn-info pull-left" href="/ApplicationUsers/Edit/@Model.Id"> Edit Profile</a>
 
-                <form method="post" action="/Profiles/Delete/@Model.Id">
+                <form method="post" action="/ApplicationUsers/Delete/@Model.Id">
 
                     <button class="btn btn-outline-danger" type="submit"><i class="bi bi-trash"></i>Delete profile</button>
 
@@ -166,7 +166,7 @@
             </div>
 
             <div class="panel panel-footer text-center" style="background-color: transparent;">
-                <a style="        background-color: #36b4e8; color: black;" class="btn btn-info btn btn-sm" href="/Posts/Show/@post.Id">See post</a>
+                <a style="        background-color: #36b4e8; color: black;" class="btn btn-info btn btn-sm" href="/ApplicationUsers/Show/@post.Id">See post</a>
 
 
             </div>

@@ -12,7 +12,13 @@ namespace Twidder.Models
         public ApplicationUser()
         {
             Groups = new List<Group>();
+            Friends = new List<ApplicationUser>(); 
+            SentFriends= new List<ApplicationUser>();
+            ReceivedFriends = new List<ApplicationUser>();
+
         }
+
+
 
         public string? FirstName { get; set; }
         public string? LastName { get; set; }

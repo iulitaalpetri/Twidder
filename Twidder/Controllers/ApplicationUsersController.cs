@@ -42,7 +42,7 @@ namespace Twidder.Controllers
             ViewBag.myProfile = true;
             if (prof.Count() == 0)
             {
-                return RedirectToAction("New", "Profiles");//de schimbat aici
+                return RedirectToAction("New", "ApplicationUsers");//de schimbat aici
             }
             else
             {
@@ -117,7 +117,7 @@ namespace Twidder.Controllers
 
 
         [Authorize(Roles = "User,Admin")]
-        public ActionResult Show(int id)
+        public ActionResult Show(string id)
         {
             ApplicationUser profile = db.Users.Find(id);
 
@@ -194,7 +194,7 @@ namespace Twidder.Controllers
             if (profiles.Count() == 0)
                 return View(profile);
             else
-                return RedirectToAction("Index", "Profiles");
+                return RedirectToAction("Index", "Users");
 
         }
 
