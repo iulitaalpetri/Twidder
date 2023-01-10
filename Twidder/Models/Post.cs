@@ -30,7 +30,7 @@ namespace Twidder.Models
 
         public virtual Group? Group { get; set; }
         
-        public virtual Profile? Profile { get; set; }
+        
 
         // [NotMapped]
 

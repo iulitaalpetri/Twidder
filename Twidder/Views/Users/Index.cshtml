@@ -7,18 +7,18 @@
 
 <div class="IndexMessage text-center container">
     <h1>@ViewBag.Message</h1>
-    <h2>Profiles</h2> 
+    <h2>Profiles</h2>
 
 
-    
+
     @if (User.IsInRole("Admin") || ViewBag.existsProfile == 0)
     {
-        <a class="btn btn-primary" href="/Profiles/New" style="background-color: #FFFFFF ; color:black">Add Profile</a>
+        <a class="btn btn-primary" href="/Users/New" style="background-color: #FFFFFF ; color:black">Add Profile</a>
     }
 
-    <br/> 
-    <br/> 
-    <br/> 
+    <br />
+    <br />
+    <br />
 
     <div class="container">
         <div class="row justify-content-center">
@@ -40,7 +40,7 @@
 
                         <div class="col-auto">
                             <button class="btn btn-lg btn-success btnSearch"
-                                    type="submit" href="/Profiles/New" style="background-color: #36b4e8; color: black">
+                                    type="submit" href="/Users/New" style="background-color: #36b4e8; color: black">
                                 Search
                             </button>
                         </div>
@@ -54,33 +54,35 @@
 
         <div>
             <nav aria-label="Page navigation">
-                <ul class="pagination"> 
+                <ul class="pagination">
                     <li>
                         @if (ViewBag.search != "")
                         {
-                            <a href="/Profiles/Index?page=1&search=@ViewBag.SearchString"
+                            <a href="/Users/Index?page=1&search=@ViewBag.SearchString"
                            aria-label="Previous">
                                 <span aria-hidden="true">&laquo;</span>
                             </a>
                         }
                         else
                         {
-                            <a href="/Profiles/Index?page=1" aria-label="Previous">
+                            <a href="/Users/Index?page=1" aria-label="Previous">
                                 <span aria-hidden="true">&laquo;</span>
                             </a>
                         }
                     </li>
 
 
-                    @for (int i=1; i<=ViewBag.lastpage; i++){
-                        if(ViewBag.search !=""){
+                    @for (int i = 1; i <= ViewBag.lastpage; i++)
+                    {
+                        if (ViewBag.search != "")
+                        {
                             <li>
-                                <a href="/Profiles/Index?page=@i&search=@ViewBag.searchstring">@(i)</a>
+                                <a href="/Users/Index?page=@i&search=@ViewBag.searchstring">@(i)</a>
                             </li>
                         }
                         else
                         {
-                            <li><a href="/Profiles/Index?page=@i">@(i)</a></li>
+                            <li><a href="/Users/Index?page=@i">@(i)</a></li>
                         }
 
                     }
@@ -88,13 +90,13 @@
                     <li>
                         @if (ViewBag.search != "")
                         {
-                            <a href="/Profiles/Index?page=@(ViewBag.lastPage)&search=@ViewBag.SearchString" arialabel="Next">
+                            <a href="/Users/Index?page=@(ViewBag.lastPage)&search=@ViewBag.SearchString" arialabel="Next">
                                 <span aria-hidden="true">&raquo;</span>
                             </a>
                         }
                         else
                         {
-                            <a href="/Profiles/Index?page=@(ViewBag.lastPage)" arialabel="Next">
+                            <a href="/Users/Index?page=@(ViewBag.lastPage)" arialabel="Next">
                                 <span aria-hidden="true">&raquo;</span>
                             </a>
                         }
@@ -113,13 +115,13 @@
         <div class="containerGroups">
             @foreach (var profile in ViewBag.Profiles)
             {
-            <div class="containerPanel">
-                <div class="panel panel-default panelGroup">
-                    <div class="paanelHeder panel-heading">@profile.ProfileName</div>
-                    <div class="panel-body">
-                        Descriere profil: <strong>@profile.ProfileDescription</strong>
-                        <br /><br />
-                        Profilul este: @if (profile.PrivateProfile == true)
+                <div class="containerPanel">
+                    <div class="panel panel-default panelGroup">
+                        <div class="paanelHeder panel-heading">@profile.ProfileName</div>
+                        <div class="panel-body">
+                            Descriere profil: <strong>@profile.ProfileDescription</strong>
+                            <br /><br />
+                            Profilul este: @if (profile.PrivateProfile == true)
                             {
                                 <text>privat</text>
                             }
@@ -127,27 +129,27 @@
                             {
                                 <text>public</text>
                             }
-                        <br />
-                        <span class="label label-success" style= "background-color:#36b4e8;">@profile.SignUpDate</span>
-                        <br />
-                        <hr>
-                    </div>
-                    <div class="panel panel-footer panelFooter">
-                        <a class="btn btn-success btn btn-sm" style= "background-color: #36b4e8; color: black" href="/Profiles/Show/@profile.ProfileId">Afisare profil</a>
+                            <br />
+                            <span class="label label-success" style="background-color:#36b4e8;">@profile.SignUpDate</span>
+                            <br />
+                            <hr>
+                        </div>
+                        <div class="panel panel-footer panelFooter">
+                            <a class="btn btn-success btn btn-sm" style="background-color: #36b4e8; color: black" href="/Profiles/Show/@profile.ProfileId">Afisare profil</a>
+                        </div>
                     </div>
                 </div>
-            </div>
             }
 
 
+        </div>
+
+
+
+
+
+
+
+
+
     </div>
-
-
-
-
-
-
-
-    
-
-</div>

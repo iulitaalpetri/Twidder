@@ -1,82 +1,92 @@
 ﻿using Microsoft.AspNetCore.Authorization;
+using Microsoft.AspNetCore.Identity;
 using Microsoft.AspNetCore.Mvc;
 using System.Data;
 using Twidder.Data;
-using System;
-using System.Collections.Generic;
-using System.Linq;
-using System.Web;
 using Twidder.Models;
-using System.Collections.Generic;
-using System.Linq;
-
-
 
 namespace Twidder.Controllers
 {
-    public class ProfilesController : Controller
+    public class ApplicationUsersController : Controller
     {
-
 
         private ApplicationDbContext db;
         private int _perpage = 100;
 
-        [Authorize(Roles = "User,Admin")]// verifica
+        private readonly UserManager<ApplicationUser> _userManager;
+
+        private readonly RoleManager<IdentityRole> _roleManager;
+
+        public ApplicationUsersController(ApplicationDbContext context,
+            UserManager<ApplicationUser> userManager,
+            RoleManager<IdentityRole> roleManager)
+        {
+            db = context;
+
+            _userManager = userManager;
+
+            _roleManager = roleManager;
+        }
+        
+
 
 
         public ActionResult MyProfile()
         {
 
-            int x = User.Identity.GetHashCode();
+            string x = _userManager.GetUserId(User);
             string uid = x.ToString();
-            var prof = db.Profiles.Where(p => p.UserId == uid);
+            var prof = db.Users.Where(p => p.Id == uid);
 
 
             ViewBag.myProfile = true;
             if (prof.Count() == 0)
             {
-                return RedirectToAction("New", "Profiles");
+                return RedirectToAction("New", "Profiles");//de schimbat aici
             }
             else
             {
-                int pid = prof.FirstOrDefault().ProfileId;   // Current user -> profile id
-                return RedirectToAction("Show/" + pid.ToString());
+                string pid = prof.FirstOrDefault().Id;   // Current user -> profile id
+                return RedirectToAction("Show/" + pid);
             }
         }
 
 
-        
         public ActionResult Index()
         {
             // daca user ul nu are profil, trebuie sa apara butonul cu adauga profil
-            int x = User.Identity.GetHashCode();
-            string uid = x.ToString();
-
-            
+            string uid = _userManager.GetUserId(User);
 
 
-            var pr = from p in db.Profiles where p.UserId == uid select p;
+
+
+            var pr = from p in db.Users where p.Id == uid select p;
 
             ViewBag.existsProfile = pr.Count();
-
+            
 
             var search = "";
-            var profile = db.Profiles.OrderBy(p => p.SignUpDate);
+
 
 
             // pt a cauta profilul, se va cauta dupa nume
-            if (Convert.ToString(HttpContext.Request.Query["search"]) != null)
-            {
+
+            if (Convert.ToString(HttpContext.Request.Query["search"]) == null) return View();
+              
 
                 search = Convert.ToString(HttpContext.Request.Query["search"]).Trim();
 
-                List<int> idProfile = db.Profiles.Where(p => p.ProfileName.Contains(search)).Select(pr => pr.ProfileId).ToList();
+                List<string> idProfile = db.Users.Where(p => p.FirstName.Contains(search)).Select(pr => pr.FirstName).ToList();
 
-                // ordinea in care primim profilurile 
-                profile = db.Profiles.Where(pr => idProfile.Contains(pr.ProfileId)).OrderBy(p => p.SignUpDate);
+                
 
 
-            }
+                var  profile = db.Users.Where(pr => idProfile.Contains(pr.Id));
+                //----------------------------------------------------------------------------------------------
+
+
+
+            
 
             var nr = profile.Count();
             var currentPage = Convert.ToInt32(Convert.ToString(HttpContext.Request.Query["page"]));
@@ -105,18 +115,19 @@ namespace Twidder.Controllers
 
 
 
+
         [Authorize(Roles = "User,Admin")]
         public ActionResult Show(int id)
         {
-            Profile profile = db.Profiles.Find(id);
+            ApplicationUser profile = db.Users.Find(id);
 
-            var posts = from p in db.Posts where p.UserId == profile.UserId select p;
+            var posts = from p in db.Posts where p.UserId == profile.Id select p;
 
             ViewBag.Posts = posts;
 
             ViewBag.UserId = (User.Identity.GetHashCode()).ToString();
 
-            if (profile.DeletedByAdmin == true && profile.UserId == User.Identity.GetHashCode().ToString())
+          /**  if (profile.DeletedByAdmin == true && profile.UserId == User.Identity.GetHashCode().ToString())
             {
                 ViewBag.DeletedByAdmin = false;
                 db.SaveChanges();
@@ -124,14 +135,15 @@ namespace Twidder.Controllers
                 TempData["warning"] = "O postare a fost stearsa din cauza continutului care nu respecta politica aplicatiei!";
 
                 ViewBag.Warning = TempData["warning"];
-            }
+            } **/
+          // pt stergerea de cate un admin a unui cont
 
 
-            string currentUserid = User.Identity.GetHashCode().ToString();
+            string currentUserid = _userManager.GetUserId(User);
             var currentUser = db.Users.Find(currentUserid);
-            var currentUserProfile = db.Profiles.Where(p => p.UserId == currentUserid).FirstOrDefault();
+            var currentUserProfile = db.Users.Where(p => p.Id == currentUserid).FirstOrDefault();
 
-            var user = profile.User;
+            var user = profile;
 
             if (currentUserProfile.SentFriends.Contains(user))
             {
@@ -143,7 +155,7 @@ namespace Twidder.Controllers
             {
                 ViewBag.friend = true;
             }
-            if (currentUserid == profile.UserId)
+            if (currentUserid == profile.Id)
             {
                 ViewBag.sameuser = true;
             }
@@ -158,6 +170,9 @@ namespace Twidder.Controllers
 
 
 
+
+
+
         [Authorize(Roles = "User,Admin")]
         public ActionResult New()
         {
@@ -166,13 +181,13 @@ namespace Twidder.Controllers
                 ViewBag.Friend = TempData["friend"];
             }
 
-            Profile profile = new Profile();
-            profile.UserId = User.Identity.GetHashCode().ToString();
-            string uid = User.Identity.GetHashCode().ToString();
+
+            ApplicationUser profile= new ApplicationUser();
+            string uid = _userManager.GetUserId(User); 
 
 
-            var profiles = from p in db.Profiles
-                           where p.UserId == uid
+            var profiles = from p in db.Users
+                           where p.Id == uid
                            select p;
 
             ViewBag.NoProfile = profiles.Count();
@@ -187,18 +202,16 @@ namespace Twidder.Controllers
 
 
 
-
         [HttpPost]
         [Authorize(Roles = "User,Admin")]
-        public ActionResult New(Profile profile)
+        public ActionResult New(ApplicationUser profile)
         {
-            profile.SignUpDate = DateTime.Now;
-            profile.UserId = User.Identity.GetHashCode().ToString();
+            profile.Id = _userManager.GetUserId(User);
             try
             {
                 if (ModelState.IsValid)
                 {
-                    db.Profiles.Add(profile);
+                    db.Users.Add(profile);
                     db.SaveChanges();
                     TempData["message"] = "Profilul a fost adaugat cu succes!";
                     return RedirectToAction("Index");
@@ -216,13 +229,12 @@ namespace Twidder.Controllers
 
 
 
-        // ---------------------ai ramas la edit -----------------------------------------
 
         [Authorize(Roles = "User,Admin")]
         public ActionResult Edit(int id)
         {
-            Profile profile = db.Profiles.Find(id);
-            if (profile.UserId == User.Identity.GetHashCode().ToString() || User.IsInRole("Admin"))
+            ApplicationUser profile = db.Users.Find(id);
+            if (profile.Id == _userManager.GetUserId(User) || User.IsInRole("Admin"))
             {
                 ViewBag.Profile = profile;
                 return View(profile);
@@ -235,24 +247,23 @@ namespace Twidder.Controllers
         }
 
 
+
+
         [HttpPut]
         [Authorize(Roles = "User,Admin")]
-        public async Task<ActionResult> EditAsync(int id, Profile requestProfile)
+        public async Task<ActionResult> EditAsync(int id, ApplicationUser requestProfile)
         {
             try
             {
                 if (ModelState.IsValid)
                 {
-                    Profile profile = db.Profiles.Find(id);
-                    if (profile.UserId == User.Identity.GetHashCode().ToString() || User.IsInRole("Admin"))
+                    ApplicationUser profile = db.Users.Find(id);
+                    if (profile.Id == _userManager.GetUserId(User) || User.IsInRole("Admin"))
                     {
-                        if ( await TryUpdateModelAsync(profile))
+                        if (await TryUpdateModelAsync(profile))
                         {
                             profile = requestProfile;
-                            /*profile.ProfileName = requestProfile.ProfileName;
-                            profile.ProfileDescription = requestProfile.ProfileDescription;
-                            profile.SignUpDate = requestProfile.SignUpDate;
-                            profile.PrivateProfile = requestProfile.PrivateProfile;*/
+                            
                             db.SaveChanges();
                             TempData["message"] = "Profilul a fost editat!";
                             return RedirectToAction("Index");
@@ -278,16 +289,15 @@ namespace Twidder.Controllers
 
 
 
-        //--------------------------------delete------------------------
 
         [HttpDelete]
         [Authorize(Roles = "User,Admin")]
         public ActionResult Delete(int id)
         {
-            Profile profile = db.Profiles.Find(id);
-            if (profile.UserId == User.Identity.GetHashCode().ToString() || User.IsInRole("Admin"))
+            ApplicationUser profile = db.Users.Find(id);
+            if (profile.Id == _userManager.GetUserId(User) || User.IsInRole("Admin"))
             {
-                db.Profiles.Remove(profile);
+                db.Users.Remove(profile);
                 db.SaveChanges();
                 TempData["message"] = "Profilul a fost sters!";
                 return RedirectToAction("Index");
@@ -301,20 +311,22 @@ namespace Twidder.Controllers
 
 
 
-        //------------------------friend req--------------------------
+
+
+
         [Authorize(Roles = "User,Admin")]
         public ActionResult SendRequest(int id)
         {
-            var profile = db.Profiles.Find(id);
-            var user = profile.User;
-            var currentUserId = User.Identity.GetHashCode().ToString();
-            var prof = db.Profiles.Where(p => p.UserId == currentUserId);
+            var profile = db.Users.Find(id);
+            var user = User;
+            var currentUserId = _userManager.GetUserId(User);
+            var prof = db.Users.Where(p => p.Id == currentUserId);
             if (prof.Count() == 0)
             {
                 TempData["friend"] = "Creeaza-ti un profil pentru a adauga prieteni!";
                 return RedirectToAction("New");
             }
-            if (currentUserId == profile.UserId)
+            if (currentUserId == profile.Id)
             {
                 return RedirectToAction("Index");
             }
@@ -322,7 +334,7 @@ namespace Twidder.Controllers
             var currentUserProfile = prof.FirstOrDefault();
             var currentUser = db.Users.Find(currentUserId);
 
-            if (currentUserProfile.SentFriends.Contains(user) || currentUserProfile.Friends.Contains(user))
+            if (currentUserProfile.SentFriends.Contains(profile) || currentUserProfile.Friends.Contains(profile))
             {
                 return RedirectToAction("Index");
             }
@@ -330,7 +342,7 @@ namespace Twidder.Controllers
             {
                 return RedirectToAction("Index");
             }
-            currentUserProfile.SentFriends.Add(user);
+            currentUserProfile.SentFriends.Add(profile);
             profile.ReceivedFriends.Add(currentUser);
             db.SaveChanges();
             return RedirectToAction("Show/" + id.ToString());
@@ -340,12 +352,11 @@ namespace Twidder.Controllers
 
 
 
-
         [Authorize(Roles = "User,Admin")]
         public ActionResult FriendRequests(int id)
         {
-            var profile = db.Profiles.Find(id);
-            if (profile.UserId != User.Identity.GetHashCode().ToString())
+            var profile = db.Users.Find(id);
+            if (profile.Id != _userManager.GetUserId(User))
             {
                 return RedirectToAction("Index");
             }
@@ -354,7 +365,7 @@ namespace Twidder.Controllers
             {
                 friendRequests.Add(user);
             }
-            ViewBag.profileId = profile.ProfileId;
+            ViewBag.profileId = profile.Id;
             ViewBag.FriendRequests = friendRequests;
             ViewBag.Length = friendRequests.Count();
             return View(profile);
@@ -364,13 +375,12 @@ namespace Twidder.Controllers
 
 
 
-
         [Authorize(Roles = "User,Admin")]
         public ActionResult AddFriend(int id, int id2)
         {
-            
-            var profile = db.Profiles.Find(id);
-            if (profile.UserId != User.Identity.GetHashCode().ToString())
+
+            var profile = db.Users.Find(id);
+            if (profile.Id != _userManager.GetUserId(User))
             {
                 return RedirectToAction("Index");
             }
@@ -386,18 +396,18 @@ namespace Twidder.Controllers
                 {
                     profile.Friends.Add(user);
                     var userId = user.Id;
-                    var userProfile = db.Profiles.Where(p => p.UserId == userId).FirstOrDefault();
-                    userProfile.Friends.Add(profile.User);
+                    var userProfile = db.Users.Where(p => p.Id == userId).FirstOrDefault();
+                    userProfile.Friends.Add(profile);
 
                     Friend friendship = new Friend();
-                    friendship.User1_Id = profile.UserId;
-                    friendship.User1 = profile.User;
+                    friendship.User1_Id = profile.Id;
+                    friendship.User1 = profile;
                     friendship.User2_Id = userId;
                     friendship.User2 = user;
                     db.Friends.Add(friendship);
 
                     profile.ReceivedFriends.Remove(user);
-                    userProfile.SentFriends.Remove(profile.User);
+                    userProfile.SentFriends.Remove(profile);
 
 
                     db.SaveChanges();
@@ -410,14 +420,19 @@ namespace Twidder.Controllers
 
 
 
+
+
+
+
+
         [Authorize(Roles = "User,Admin")]
         public ActionResult Friends(int id)
         {
-            var profile = db.Profiles.Find(id);
-            ViewBag.currentUser = User.Identity.GetHashCode().ToString();
-            ViewBag.UserId = profile.UserId.ToString();
+            var profile = db.Users.Find(id);
+            ViewBag.currentUser = _userManager.GetUserId(User);
+            ViewBag.UserId = profile.Id.ToString();
             /* ViewBag.friends = profile.Friends;*/
-            var userId = profile.UserId;
+            var userId = profile.Id;
             var friendships1 = db.Friends.Where(f => f.User1_Id == userId);
             List<ApplicationUser> friends1 = new List<ApplicationUser>();
             foreach (var friendship in friendships1)
@@ -439,11 +454,9 @@ namespace Twidder.Controllers
             }
             ViewBag.friends = Friends;
             ViewBag.Length = friends.Count();
-            ViewBag.profileId = profile.ProfileId;
+            ViewBag.profileId = profile.Id;
             return View(profile);
         }
-
-
 
 
 
@@ -451,8 +464,8 @@ namespace Twidder.Controllers
         [Authorize(Roles = "User,Admin")]
         public ActionResult DeclineFriend(int id, int id2)
         {
-            var profile = db.Profiles.Find(id);
-            if (profile.UserId != User.Identity.GetHashCode().ToString())
+            var profile = db.Users.Find(id);
+            if (profile.Id != _userManager.GetUserId(User))
             {
                 return RedirectToAction("Index");
             }
@@ -467,10 +480,10 @@ namespace Twidder.Controllers
                 if (id2 == j)
                 {
                     var userId = user.Id;
-                    var userProfile = db.Profiles.Where(p => p.UserId == userId).FirstOrDefault();
+                    var userProfile = db.Users.Where(p => p.Id == userId).FirstOrDefault();
 
                     profile.ReceivedFriends.Remove(user);
-                    userProfile.SentFriends.Remove(profile.User);
+                    userProfile.SentFriends.Remove(profile);
 
                     db.SaveChanges();
                     break;
@@ -480,19 +493,16 @@ namespace Twidder.Controllers
         }
 
 
-
-
-
         [Authorize(Roles = "User,Admin")]
         public ActionResult DeleteFriend(int id, int id2)
         {
 
-            var profile = db.Profiles.Find(id);
-            if (profile.UserId != User.Identity.GetHashCode().ToString())
+            var profile = db.Users.Find(id);
+            if (profile.Id != _userManager.GetUserId(User))
             {
                 return RedirectToAction("Index");
             }
-            var userId = profile.UserId;
+            var userId = profile.Id;
             var friendships1 = db.Friends.Where(f => f.User1_Id == userId);
             List<ApplicationUser> friends1 = new List<ApplicationUser>();
             foreach (var friendship in friendships1)
@@ -518,7 +528,7 @@ namespace Twidder.Controllers
                 if (id2 == j)
                 {
                     var user2Id = user.Id;
-                    var userProfile = db.Profiles.Where(p => p.UserId == user2Id).FirstOrDefault();
+                    var userProfile = db.Users.Where(p => p.Id == user2Id).FirstOrDefault();
 
                     var friendShips = db.Friends.Where(f => (f.User1_Id == userId && f.User2_Id == user2Id) || (f.User2_Id == userId && f.User1_Id == user2Id));
                     foreach (var friendship in friendShips)
@@ -537,8 +547,8 @@ namespace Twidder.Controllers
         [Authorize(Roles = "User,Admin")]
         public ActionResult JoinedGroups(int id)
         {
-            var profile = db.Profiles.Find(id);
-            var user = profile.User;
+            var profile = db.Users.Find(id);
+            var user = profile;
             ViewBag.joinedGroups = user.Groups;
             return View(profile);
         }
@@ -550,8 +560,34 @@ namespace Twidder.Controllers
 
 
 
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
     }
-
-
-
 }
