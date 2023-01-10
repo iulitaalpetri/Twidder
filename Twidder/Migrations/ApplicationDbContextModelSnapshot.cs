@@ -368,7 +368,6 @@ namespace Twidder.Migrations
                     SqlServerPropertyBuilderExtensions.UseIdentityColumn(b.Property<int>("Id"), 1L, 1);
 
                     b.Property<string>("CreatorId")
-                        .IsRequired()
                         .HasColumnType("nvarchar(max)");
 
                     b.Property<string>("GroupDescription")
@@ -541,20 +540,6 @@ namespace Twidder.Migrations
                 {
                     b.Navigation("Comments");
                 });
-<<<<<<< HEAD
-=======
-
-            modelBuilder.Entity("Twidder.Models.Profile", b =>
-                {
-                    b.Navigation("Friends");
-
-                    b.Navigation("Posts");
-
-                    b.Navigation("ReceivedFriends");
-
-                    b.Navigation("SentFriends");
-                });
->>>>>>> 6760eaabf4ea1965a6dc508e62bf3ebe5421ece5
 #pragma warning restore 612, 618
         }
     }

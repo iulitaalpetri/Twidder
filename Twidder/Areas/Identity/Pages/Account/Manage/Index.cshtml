@@ -41,7 +41,7 @@
             <div asp-validation-summary="ModelOnly" class="text-danger"></div>
             <div class="form-group">
                 <label class="control-label">Profile Picture</label>
-                <img id="profilePicture" style="width:350px;height:350px; object-fit:cover" src="@Model.Input.ProfilePictureFilePath.Substring(7)">
+                <img id="profilePicture" style="width:350px;height:350px; object-fit:cover" src="@(Model.Input.ProfilePictureFilePath != null ? Model.Input.ProfilePictureFilePath.Substring(7) : "" ) ">
                 <input type="file" name="profilePicture" class="form-control" />
             </div>
         </div>
