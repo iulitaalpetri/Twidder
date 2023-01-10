@@ -16,9 +16,10 @@ namespace Twidder.Models
         [StringLength(30, ErrorMessage = "Numele grupului nu poate avea mai mult de 30 de caractere")]
         
         public string GroupDescription { get; set; }
-        public string CreatorId { get; set; }
-        public virtual ICollection<ApplicationUser> Users { get; set; }
-        public virtual ICollection<Post> Posts { get; set; }
+
+        public string? CreatorId { get; set; }
+        public virtual ICollection<ApplicationUser>? Users { get; set; }
+        public virtual ICollection<Post>? Posts { get; set; }
     }
 
 }
