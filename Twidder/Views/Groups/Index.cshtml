@@ -34,7 +34,7 @@
                 <div><i class="card-text"></i> @group.GroupDescription</div>
                 <a class="btn btn-success" href="/Groups/Show/@group.Id">Afisare grup</a>
 
-                @if (group.CreatorId == ViewBag.UserCurent || ViewBag.EsteAdmin)
+                @if (group.CreatorId == ViewBag.CurrentUser || ViewBag.EsteAdmin)
                     {
                        <div class="d-flex">
 

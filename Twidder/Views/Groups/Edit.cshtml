@@ -18,6 +18,12 @@
     @Html.ValidationMessageFor(m => m.GroupName, null, new { @class = "text-danger" })
             <br />
 
+
+    @Html.Label("GroupDescription", "Descriere grup")
+            <br />
+    @Html.Editor("GroupDescription")
+
+    @Html.ValidationMessageFor(m => m.GroupDescription, null, new { @class = "text-danger" })
             <br />
 
             <button class="btn btn-success" type="submit">Modifica grupul</button>

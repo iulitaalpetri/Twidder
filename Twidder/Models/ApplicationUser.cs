@@ -9,7 +9,11 @@ namespace Twidder.Models
 
         public class ApplicationUser : IdentityUser
         {
-        
+        public ApplicationUser()
+        {
+            Groups = new List<Group>();
+        }
+
         public string? FirstName { get; set; }
         public string? LastName { get; set; }
         public int UsernameChangeLimit { get; set; } = 10;
