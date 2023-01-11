@@ -5,6 +5,12 @@
       "resourceId": null,
       "type": "mssql.local",
       "connectionId": "ConnectionStrings:DefaultConnection"
+    },
+    "mssql2": {
+      "secretStore": null,
+      "type": "mssql.local",
+      "connectionId": "ConnectionStrings:BD",
+      "dynamicId": null
     }
   }
 }

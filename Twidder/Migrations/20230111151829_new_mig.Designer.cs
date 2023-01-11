@@ -12,8 +12,8 @@ using Twidder.Data;
 namespace Twidder.Migrations
 {
     [DbContext(typeof(ApplicationDbContext))]
-    [Migration("20230110222916_tabele2")]
-    partial class tabele2
+    [Migration("20230111151829_new_mig")]
+    partial class new_mig
     {
         protected override void BuildTargetModel(ModelBuilder modelBuilder)
         {
