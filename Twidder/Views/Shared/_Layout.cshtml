@@ -25,25 +25,29 @@
                         <li class="nav-item">
                             <a class="nav-link text-dark" asp-area="" asp-controller="Home" asp-action="Privacy">Privacy</a>
                         </li>
+                        @if(User.IsInRole("Admin") || User.IsInRole("User") )
+                        {
                         <li class="nav-item">
-                            <a class="nav-link text-dark" asp-area="" asp-controller="Posts" asp-action="Index">Posts</a>
+                            <a class="nav-link text-dark" asp-area="" asp-controller="ApplicationUsers" asp-action="Index">Persoane</a>
                         </li>
                         <li class="nav-item">
-                            <a class="nav-link text-dark" asp-area="" asp-controller="Groups" asp-action="Index">Groups</a>
+                            <a class="nav-link text-dark" asp-area="" asp-controller="Posts" asp-action="Index">Postari</a>
                         </li>
                         <li class="nav-item">
-                            <a class="nav-link text-dark" asp-area="" asp-controller="ApplicationUsers" asp-action="Index">People</a>
+                            <a class="nav-link text-dark" asp-area="" asp-controller="Groups" asp-action="Index">Grupuri</a>
                         </li>
                         <li class="nav-item">
-                            <a class="nav-link text-dark" asp-area="" asp-controller="Friends" asp-action="Index">My Friends</a>
+                            <a class="nav-link text-dark" asp-area="" asp-controller="Friends" asp-action="Index">Prietenii mei</a>
                         </li>
+                        }
+                        
                         @if (User.IsInRole("Admin"))
                         {
                          <li class="nav-item">
-                            <a class="nav-link text-dark" asp-area="" asp-controller="UserRoles" asp-action="Index">User Roles</a>
+                            <a class="nav-link text-dark" asp-area="" asp-controller="UserRoles" asp-action="Index">Manager Useri</a>
                         </li>
                         <li class="nav-item">
-                            <a class="nav-link text-dark" asp-area="" asp-controller="RoleManager" asp-action="Index">Roles Manager</a>
+                            <a class="nav-link text-dark" asp-area="" asp-controller="RoleManager" asp-action="Index">Manager Roluri</a>
                         </li>
                         }
                         

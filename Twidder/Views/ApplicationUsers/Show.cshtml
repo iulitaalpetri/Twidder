@@ -73,41 +73,35 @@
         else if (ViewBag.sameUser == true)
         {
 
-            <a style="        background-color: #36b4e8; color: black;" class="btn btn-info" href="/ApplicationUsers/FriendRequests/@Model.Id">Friend Requests</a>
+            <a style="        background-color: #36b4e8; color: black;" class="btn btn-info" href="/Friends">Friend Requests</a>
         }
         else if (ViewBag.nobutton == true)
         {
             <p> </p>
         }
-        else
-        {
-           
-        <br />
-
-    }
-        <a class="btn btn-info" href="/Friends/SendRequest/@Model.Id">Add friend</a>
-
-        }
-
-
-
-
-        <a style="        background-color: #36b4e8; color: black;" class="btn btn-info" href="/ApplicationUsers/Friends/@Model.Id">Friends</a>
-
-        <a style="        background-color: #36b4e8; color: black;" class="btn btn-info" href="/ApplicationUsers/JoinedGroups/@Model.Id">Groups</a>
 
 
     </div>
+
+
+
+
+
+    <a style="        background-color: #36b4e8; color: black;" class="btn btn-info" href="/ApplicationUsers/Friends/@Model.Id">Friends</a>
+
+    <a style="        background-color: #36b4e8; color: black;" class="btn btn-info" href="/ApplicationUsers/JoinedGroups/@Model.Id">Groups</a>
+
+
 
     <br />
     <br />
 
 
     <div class="panel panel-default groupInfo">
-        
+
         <div class="panel-body text-center">
 
-             <br />
+            <br />
 
             The profile is:
             @if (Model.PrivateProfile == true)
@@ -126,23 +120,8 @@
             <strong> @Model.UserName</strong>
             <br />
 
-           
+
             <hr>
-
-            @if (User.IsInRole("Admin") || (User.IsInRole("User") && Model.Id == ViewBag.UserId))
-            {
-
-                <a style="        background-color: #36b4e8; color: black;" class="btn btn-info pull-left" href="/ApplicationUsers/Edit/@Model.Id"> Edit Profile</a>
-
-                <form method="post" action="/ApplicationUsers/Delete/@Model.Id">
-
-                    <button class="btn btn-outline-danger" type="submit"><i class="bi bi-trash"></i>Delete profile</button>
-
-
-                </form>
-
-
-            }
 
 
 

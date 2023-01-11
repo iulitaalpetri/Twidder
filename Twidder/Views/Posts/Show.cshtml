@@ -28,7 +28,29 @@
     </div>
    
     
+@if (Model.UserId == ViewBag.UserCurent || ViewBag.EsteAdmin)
+{
 
+    <div class="d-flex">
+
+        <div>
+
+            <a class="btn btn-outline-primary" href="/Posts/Edit/@Model.Id"><i class="bi bi-pencil-square"></i>Editeaza</a>
+
+        </div>
+
+        <div>
+
+            <form method="post" action="/Posts/Delete/@Model.Id">
+
+                <button class="btn btn-outline-danger" type="submit"><i class="bi bi-trash"></i>Sterge</button>
+
+            </form>
+
+        </div>
+
+    </div>
+}
 <br />
 <br />
 

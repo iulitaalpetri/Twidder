@@ -27,8 +27,6 @@ namespace Twidder.Controllers
 
             _roleManager = roleManager;
         }
-        
-
 
 
         public ActionResult MyProfile()
@@ -50,61 +48,6 @@ namespace Twidder.Controllers
                 return RedirectToAction("Show/" + pid);
             }
         }
-
-
-        //public ActionResult Index()
-        //{
-        //    // daca user ul nu are profil, trebuie sa apara butonul cu adauga profil
-        //    string uid = _userManager.GetUserId(User);
-
-
-
-
-        //    var pr = from p in db.Users where p.Id == uid select p;
-
-        //    ViewBag.existsProfile = pr.Count();
-
-
-        //    var search = "";
-
-
-
-        //    // pt a cauta profilul, se va cauta dupa nume
-
-        //    if (Convert.ToString(HttpContext.Request.Query["search"]) == null) return View();
-        //    search = Convert.ToString(HttpContext.Request.Query["search"]).Trim();
-        //    List<string> idProfile = db.Users.Where(p => p.FirstName.Contains(search)).Select(pr => pr.FirstName).ToList();
-        //    var  profile = db.Users.Where(pr => idProfile.Contains(pr.Id));
-        //    //----------------------------------------------------------------------------------------------
-
-
-
-
-
-        //    var nr = profile.Count();
-        //    var currentPage = Convert.ToInt32(Convert.ToString(HttpContext.Request.Query["page"]));
-        //    var offset = 0;
-
-        //    if (!currentPage.Equals(0))
-        //    {
-        //        offset = (currentPage - 1) * this._perpage;
-        //    }
-
-
-        //    var paginatedProfiles = profile.Skip(offset).Take(this._perpage);
-
-        //    if (TempData.ContainsKey("message"))
-        //    {
-        //        ViewBag.Message = TempData["message"];
-        //    }
-
-        //    ViewBag.total = nr;
-        //    ViewBag.lastpage = Math.Ceiling((float)nr / (float)this._perpage);
-        //    ViewBag.Profiles = paginatedProfiles;
-        //    ViewBag.searchstring = search;
-        //    return View();
-
-        //}
 
         public ActionResult Index(string searchString, int currentPage = 0) {
             List<ApplicationUser> allUsers = null;
@@ -132,9 +75,6 @@ namespace Twidder.Controllers
             ApplicationUser targetUser = db.Users.Find(id);
             ApplicationUser currentUser = await _userManager.GetUserAsync(User);
 
-            //ViewBag.sentReq = currentUser.SentFriends.Contains(targetUser);
-            //ViewBag.friend = currentUser.Friends.Contains(targetUser);
-            //ViewBag.nobutton = targetUser.SentFriends.Contains(currentUser);
             ViewBag.UserId = _userManager.GetUserId(User);
             ViewBag.sameuser = currentUser.Id == targetUser.Id;
             var friends = db.Friends.Where(u => 
@@ -169,130 +109,6 @@ namespace Twidder.Controllers
 
             return View(targetUser);
         }
-
-        [Authorize(Roles = "User,Admin")]
-        public ActionResult New()
-        {
-            if (TempData.ContainsKey("friend"))
-            {
-                ViewBag.Friend = TempData["friend"];
-            }
-
-
-            ApplicationUser profile= new ApplicationUser();
-            string uid = _userManager.GetUserId(User); 
-
-
-            var profiles = from p in db.Users
-                           where p.Id == uid
-                           select p;
-
-            ViewBag.NoProfile = profiles.Count();
-            if (profiles.Count() == 0)
-                return View(profile);
-            else
-                return RedirectToAction("Index", "Users");
-
-        }
-
-        [HttpPost]
-        [Authorize(Roles = "User,Admin")]
-        public ActionResult New(ApplicationUser profile)
-        {
-            profile.Id = _userManager.GetUserId(User);
-            try
-            {
-                if (ModelState.IsValid)
-                {
-                    db.Users.Add(profile);
-                    db.SaveChanges();
-                    TempData["message"] = "Profilul a fost adaugat cu succes!";
-                    return RedirectToAction("Index");
-                }
-                else
-                {
-                    return View(profile);
-                }
-            }
-            catch (Exception e)
-            {
-                return View(profile);
-            }
-        }
-
-        [Authorize(Roles = "User,Admin")]
-        public ActionResult Edit(int id)
-        {
-            ApplicationUser profile = db.Users.Find(id);
-            if (profile.Id == _userManager.GetUserId(User) || User.IsInRole("Admin"))
-            {
-                ViewBag.Profile = profile;
-                return View(profile);
-            }
-            else
-            {
-                TempData["message"] = "Nu aveti dreptul sa faceti modificari asupra unui profil care nu va apartine";
-                return RedirectToAction("Index");
-            }
-        }
-
-        [HttpPut]
-        [Authorize(Roles = "User,Admin")]
-        public async Task<ActionResult> EditAsync(int id, ApplicationUser requestProfile)
-        {
-            try
-            {
-                if (ModelState.IsValid)
-                {
-                    ApplicationUser profile = db.Users.Find(id);
-                    if (profile.Id == _userManager.GetUserId(User) || User.IsInRole("Admin"))
-                    {
-                        if (await TryUpdateModelAsync(profile))
-                        {
-                            profile = requestProfile;
-                            
-                            db.SaveChanges();
-                            TempData["message"] = "Profilul a fost editat!";
-                            return RedirectToAction("Index");
-                        }
-                        return View(requestProfile);
-                    }
-                    else
-                    {
-                        TempData["message"] = "Nu aveti dreptul sa faceti modificari asupra unui profil care nu va apartine";
-                        return RedirectToAction("Index");
-                    }
-                }
-                else
-                {
-                    return View(requestProfile);
-                }
-            }
-            catch (Exception e)
-            {
-                return View(requestProfile);
-            }
-        }
-
-        [HttpDelete]
-        [Authorize(Roles = "User,Admin")]
-        public ActionResult Delete(int id)
-        {
-            ApplicationUser profile = db.Users.Find(id);
-            if (profile.Id == _userManager.GetUserId(User) || User.IsInRole("Admin"))
-            {
-                db.Users.Remove(profile);
-                db.SaveChanges();
-                TempData["message"] = "Profilul a fost sters!";
-                return RedirectToAction("Index");
-            }
-            else
-            {
-                TempData["message"] = "Nu aveti dreptul sa stergeti un profil care nu va apartine";
-                return RedirectToAction("Index");
-            }
-        }
-
         
 
     }

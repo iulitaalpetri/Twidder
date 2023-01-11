@@ -84,26 +84,25 @@
             {
                 <div class="containerPanel">
                     <div class="panel panel-default panelGroup">
-                        <div class="paanelHeder panel-heading">@profile.FirstName @profile.LastName</div>
                         <div class="panel-body">
-                            <br /><br />
-                            Profilul este: @if (profile.PrivateProfile == true)
+                            <div class="card" style="width: 18rem;">
+                                <img  style="width:300px;height:300px; border-radius:30px" src="@(profile.ProfilePictureFilePath != null ? profile.ProfilePictureFilePath.Substring(7) : "https://upload.wikimedia.org/wikipedia/commons/3/37/No_person.jpg" )" class="card-img-top" alt="...">
+                                 <div class="card-body">
+                                 <h5 class="card-title">@profile.FirstName @profile.LastName</h5>
+                                 <p class="card-text">Profilul este: @if (profile.PrivateProfile == true)
                             {
                                 <text>privat</text>
                             }
                             else
                             {
                                 <text>public</text>
-                            }
-                            <br />
-                            
-                            <hr>
-                        </div>
-                       
-                        <div class="panel panel-footer panelFooter">
-                            @if ((profile.PrivateProfile && User.Identity.IsAuthenticated) || !profile.PrivateProfile) {
-                              <a class="btn btn-success btn btn-sm" style="background-color: #36b4e8; color: black" href="/ApplicationUsers/Show/@profile.Id">Afisare profil</a>
-                            }
+                            }</p>
+                                     @if ((profile.PrivateProfile && User.Identity.IsAuthenticated) || !profile.PrivateProfile) {
+                                        <a class="btn btn-success btn btn-sm" style="background-color: #36b4e8; color: black" href="/ApplicationUsers/Show/@profile.Id">Afisare profil</a>
+                                    }
+                                 </div>
+                            </div> @* cardul *@ 
+                            <hr />
                         </div>
                     </div>
                 </div>

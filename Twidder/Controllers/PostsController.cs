@@ -134,7 +134,7 @@ namespace Twidder.Controllers
 
             //article.Categ = GetAllCategories();
 
-            return View();
+            return View(post);
 
         }
 
@@ -156,7 +156,7 @@ namespace Twidder.Controllers
             }
             else
             {
-                return View(requestPost);
+                return RedirectToAction("Show", new { id = post.Id });
             }
         }
 
@@ -166,50 +166,15 @@ namespace Twidder.Controllers
         public ActionResult Delete(int id)
         {
 
-            Post post = db.Posts.Find(id);
-            
+            Post post = db.Posts.Include("Comments")
+                                         .Where(art => art.Id == id)
+                                         .First();
+
             db.Posts.Remove(post);
             db.SaveChanges();
             TempData["message"] = "Postarea a fost stearsa";
             return RedirectToAction("Index");
         }
-
-        [NonAction]
-       // public IEnumerable<SelectListItem> GetAllCategories()
-        //{
-            // generam o lista de tipul SelectListItem fara elemente
-            //var selectList = new List<SelectListItem>();
-
-            // extragem toate categoriile din baza de date
-           // var users = from u in db.
-                            // select cat;
-
-            // iteram prin categorii
-           // foreach (var category in categories)
-            //{
-                // adaugam in lista elementele necesare pentru dropdown
-                // id-ul categoriei si denumirea acesteia
-                //selectList.Add(new SelectListItem
-                //{
-                    //Value = category.Id.ToString(),
-                  //  Text = category.CategoryName.ToString()
-                //});
-            //}
-            /* Sau se poate implementa astfel: 
-             * 
-            foreach (var category in categories)
-            {
-                var listItem = new SelectListItem();
-                listItem.Value = category.Id.ToString();
-                listItem.Text = category.CategoryName.ToString();
-
-                selectList.Add(listItem);
-             }*/
-
-
-            // returnam lista de categorii
-            //return selectList;
-        //}
 
         public IActionResult IndexNou()
         {
