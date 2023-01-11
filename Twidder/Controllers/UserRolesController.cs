@@ -17,6 +17,7 @@ namespace Twidder.Controllers
             _userManager = userManager;
         }
 
+        [Authorize(Roles = "Admin")]
         // show users and their roles
         public async Task<IActionResult> Index()
         {
@@ -71,8 +72,10 @@ namespace Twidder.Controllers
             }
             return View(model);
         }
+
         // modify user roles
-            [HttpPost]
+        [Authorize(Roles = "Admin")]
+        [HttpPost]
             public async Task<IActionResult> Manage(List<ManageUserRolesViewModel> model, string userId)
             {
                 var user = await _userManager.FindByIdAsync(userId);
