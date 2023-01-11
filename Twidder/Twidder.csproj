@@ -20,6 +20,7 @@
 
   <ItemGroup>
     <None Remove="Models\NewFile.txt" />
+    <None Remove="Views\Friends\NewFile.txt" />
   </ItemGroup>
 
   <ItemGroup>

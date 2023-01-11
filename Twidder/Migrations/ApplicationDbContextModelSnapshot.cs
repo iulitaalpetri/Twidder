@@ -344,17 +344,20 @@ namespace Twidder.Migrations
                     b.Property<int>("FriendshipId")
                         .HasColumnType("int");
 
-                    b.Property<string>("User1_Id")
+                    b.Property<string>("RequestFrom_Id")
                         .HasColumnType("nvarchar(450)");
 
-                    b.Property<string>("User2_Id")
+                    b.Property<string>("RequestTo_Id")
                         .HasColumnType("nvarchar(450)");
+
+                    b.Property<bool>("friends")
+                        .HasColumnType("bit");
 
                     b.HasKey("id");
 
-                    b.HasIndex("User1_Id");
+                    b.HasIndex("RequestFrom_Id");
 
-                    b.HasIndex("User2_Id");
+                    b.HasIndex("RequestTo_Id");
 
                     b.ToTable("Friends", "Identity");
                 });
@@ -499,17 +502,17 @@ namespace Twidder.Migrations
 
             modelBuilder.Entity("Twidder.Models.Friend", b =>
                 {
-                    b.HasOne("Twidder.Models.ApplicationUser", "User1")
+                    b.HasOne("Twidder.Models.ApplicationUser", "RequestFrom")
                         .WithMany()
-                        .HasForeignKey("User1_Id");
+                        .HasForeignKey("RequestFrom_Id");
 
-                    b.HasOne("Twidder.Models.ApplicationUser", "User2")
+                    b.HasOne("Twidder.Models.ApplicationUser", "RequestTo")
                         .WithMany()
-                        .HasForeignKey("User2_Id");
+                        .HasForeignKey("RequestTo_Id");
 
-                    b.Navigation("User1");
+                    b.Navigation("RequestFrom");
 
-                    b.Navigation("User2");
+                    b.Navigation("RequestTo");
                 });
 
             modelBuilder.Entity("Twidder.Models.Post", b =>

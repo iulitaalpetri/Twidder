@@ -11,11 +11,11 @@
 </br>
 </br>
 
-@if (Model.Id == User.Identity.GetHashCode().ToString())
+@*@if (Model.Id == User.Identity.GetHashCode().ToString())
 {
     <h1> @ViewBag.Warning </h1>
 }
-
+*@
 
 @if (Model.PrivateProfile == true)
 {
@@ -42,7 +42,7 @@
     }
     else
     {
-        <a class="btn btn-info" href="/ApplicationUsers/SendRequest/@Model.Id">Add friend</a>
+        <a class="btn btn-info" href="/Friends/SendRequest/@Model.Id">Add friend</a>
     }
 }
 
@@ -81,7 +81,12 @@
         }
         else
         {
-            <a class="btn btn-info" href="/ApplicationUsers/SendRequest/@Model.Id">Add friend </a>
+           
+        <br />
+
+    }
+        <a class="btn btn-info" href="/Friends/SendRequest/@Model.Id">Add friend</a>
+
         }
 
 
@@ -154,7 +159,6 @@
     foreach (var post in ViewBag.Posts)
     {
         <div class="panel panel-default GroupPosts">
-            <div class="panel-heading text-center">@post.Title</div>
             <div class="panel-body text-center">
                 <strong>@post.Content</strong>
                 <br />

@@ -27,9 +27,8 @@ namespace Twidder.Data
         public DbSet<Group> Groups { get; internal set; }
         public DbSet<Post> Posts { get; internal set; }
 
-        
-
         public DbSet<Friend> Friends { get; internal set; }
+
 
         
 

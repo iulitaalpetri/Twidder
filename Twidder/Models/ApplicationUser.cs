@@ -1,5 +1,6 @@
 ﻿using Microsoft.AspNetCore.Identity;
 using System.ComponentModel.DataAnnotations;
+using System.ComponentModel.DataAnnotations.Schema;
 using Twidder.Models;
 
 namespace Twidder.Models
@@ -12,10 +13,6 @@ namespace Twidder.Models
         public ApplicationUser()
         {
             Groups = new List<Group>();
-            Friends = new List<ApplicationUser>(); 
-            SentFriends= new List<ApplicationUser>();
-            ReceivedFriends = new List<ApplicationUser>();
-
         }
 
 
@@ -33,15 +30,6 @@ namespace Twidder.Models
         //public bool DeletedByAdmin { get; set; }
 
         public virtual ICollection<Post> Posts { get; set; }
-
-
-        public virtual ICollection<ApplicationUser> Friends { get; set; }
-
-
-        public virtual ICollection<ApplicationUser> SentFriends { get; set; }
-
-
-        public virtual ICollection<ApplicationUser> ReceivedFriends { get; set; }
 
     }
 

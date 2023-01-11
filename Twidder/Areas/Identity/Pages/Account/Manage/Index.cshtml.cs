@@ -85,6 +85,9 @@ namespace Twidder.Areas.Identity.Pages.Account.Manage
             public string PhoneNumber { get; set; }
             [Display(Name = "Profile Picture")]
             public string? ProfilePictureFilePath { get; set; }
+
+            [Display(Name = "Private Profile")]
+            public bool PrivateProfile { get; set; }
         }
 
         private async Task LoadAsync(ApplicationUser user)
@@ -94,7 +97,7 @@ namespace Twidder.Areas.Identity.Pages.Account.Manage
             var firstName = user.FirstName;
             var lastName = user.LastName;
             var profilePictureFilePath = user.ProfilePictureFilePath;
-
+            var privateProfile = user.PrivateProfile;
             Username = userName;
 
             Input = new InputModel
@@ -103,7 +106,8 @@ namespace Twidder.Areas.Identity.Pages.Account.Manage
                 Username = userName,
                 FirstName = firstName,
                 LastName = lastName,
-                ProfilePictureFilePath = profilePictureFilePath
+                ProfilePictureFilePath = profilePictureFilePath,
+                PrivateProfile = privateProfile
             };
         }
 
@@ -161,6 +165,8 @@ namespace Twidder.Areas.Identity.Pages.Account.Manage
                 user.LastName = Input.LastName;
                 await _userManager.UpdateAsync(user);
             }
+
+           
             // change username
             // limit username changes
             if (user.UsernameChangeLimit > 0)
@@ -205,6 +211,15 @@ namespace Twidder.Areas.Identity.Pages.Account.Manage
 
 
             }
+
+            // Profil privat
+            var privateProfile = user.PrivateProfile;
+            if (Input.PrivateProfile != privateProfile)
+            {
+                user.PrivateProfile = Input.PrivateProfile;
+                await _userManager.UpdateAsync(user);
+            }
+
 
             await _signInManager.RefreshSignInAsync(user);
             StatusMessage = "Your profile has been updated";

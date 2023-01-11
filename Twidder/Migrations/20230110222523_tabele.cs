@@ -5,7 +5,7 @@ using Microsoft.EntityFrameworkCore.Migrations;
 
 namespace Twidder.Migrations
 {
-    public partial class Anne1 : Migration
+    public partial class tabele : Migration
     {
         protected override void Up(MigrationBuilder migrationBuilder)
         {
@@ -52,7 +52,7 @@ namespace Twidder.Migrations
                         .Annotation("SqlServer:Identity", "1, 1"),
                     GroupName = table.Column<string>(type: "nvarchar(max)", nullable: false),
                     GroupDescription = table.Column<string>(type: "nvarchar(30)", maxLength: 30, nullable: false),
-                    CreatorId = table.Column<string>(type: "nvarchar(max)", nullable: true)
+                    CreatorId = table.Column<string>(type: "nvarchar(1000)", maxLength: 1000, nullable: true)
                 },
                 constraints: table =>
                 {
@@ -98,34 +98,6 @@ namespace Twidder.Migrations
                 constraints: table =>
                 {
                     table.PrimaryKey("PK_User", x => x.Id);
-                });
-
-            migrationBuilder.CreateTable(
-                name: "Friends",
-                schema: "Identity",
-                columns: table => new
-                {
-                    id = table.Column<int>(type: "int", nullable: false)
-                        .Annotation("SqlServer:Identity", "1, 1"),
-                    FriendshipId = table.Column<int>(type: "int", nullable: false),
-                    User1_Id = table.Column<string>(type: "nvarchar(450)", nullable: true),
-                    User2_Id = table.Column<string>(type: "nvarchar(450)", nullable: true)
-                },
-                constraints: table =>
-                {
-                    table.PrimaryKey("PK_Friends", x => x.id);
-                    table.ForeignKey(
-                        name: "FK_Friends_AspNetUsers_User1_Id",
-                        column: x => x.User1_Id,
-                        principalSchema: "Identity",
-                        principalTable: "AspNetUsers",
-                        principalColumn: "Id");
-                    table.ForeignKey(
-                        name: "FK_Friends_AspNetUsers_User2_Id",
-                        column: x => x.User2_Id,
-                        principalSchema: "Identity",
-                        principalTable: "AspNetUsers",
-                        principalColumn: "Id");
                 });
 
             migrationBuilder.CreateTable(
@@ -363,18 +335,6 @@ namespace Twidder.Migrations
                 column: "UserId");
 
             migrationBuilder.CreateIndex(
-                name: "IX_Friends_User1_Id",
-                schema: "Identity",
-                table: "Friends",
-                column: "User1_Id");
-
-            migrationBuilder.CreateIndex(
-                name: "IX_Friends_User2_Id",
-                schema: "Identity",
-                table: "Friends",
-                column: "User2_Id");
-
-            migrationBuilder.CreateIndex(
                 name: "IX_Posts_GroupId",
                 schema: "Identity",
                 table: "Posts",
@@ -427,10 +387,6 @@ namespace Twidder.Migrations
 
             migrationBuilder.DropTable(
                 name: "Comments",
-                schema: "Identity");
-
-            migrationBuilder.DropTable(
-                name: "Friends",
                 schema: "Identity");
 
             migrationBuilder.DropTable(

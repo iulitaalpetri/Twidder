@@ -11,7 +11,7 @@
 
 
 
-    @if (User.IsInRole("Admin") || ViewBag.existsProfile == 0)
+    @if (User.IsInRole("Admin") || !User.Identity.IsAuthenticated)
     {
         <a class="btn btn-primary" href="/ApplicationUsers/New" style="background-color: #FFFFFF ; color:black">Add Profile</a>
     }
@@ -23,6 +23,7 @@
     <div class="container">
         <div class="row justify-content-center">
             <div class="col-12 col-md-10 col-lg-8">
+
                 <form class="card card-sm" method="GET">
                     <div class="card-body row no-gutters align-items-center">
                         <div class="col-auto">
@@ -30,9 +31,8 @@
                         </div>
 
                         <div class="col">
-                            <input class="form-control form-control-lg form-controlborderless barSearch" type="text" name="search"
-                                   value="@ViewBag.searchstring"
-                                   placeholder="Search topics or keywords">
+                            <input class="form-control form-control-lg form-controlborderless barSearch" type="text" name="searchString"
+                                   placeholder="Search users here">
                         </div>
 
                         <br />
@@ -40,14 +40,16 @@
 
                         <div class="col-auto">
                             <button class="btn btn-lg btn-success btnSearch"
-                                    type="submit" href="/ApplicationUsers/New" style="background-color: #36b4e8; color: black">
+                                    type="submit" style="background-color: #36b4e8; color: black">
                                 Search
                             </button>
+                            <a class="btn btn-lg btn-success btnSearch" style="background-color: #36b4e8; color: black" href="/ApplicationUsers/Index">
+                                Clear
+                            </a>
                         </div>
                         <!--end of col-->
                     </div>
-
-                </form>
+                 </form>
             </div>
 
         </div>
@@ -56,70 +58,34 @@
             <nav aria-label="Page navigation">
                 <ul class="pagination">
                     <li>
-                        @if (ViewBag.search != "")
-                        {
-                            <a href="/ApplicationUsers/Index?page=1&search=@ViewBag.SearchString"
-                           aria-label="Previous">
-                                <span aria-hidden="true">&laquo;</span>
-                            </a>
-                        }
-                        else
-                        {
-                            <a href="/ApplicationUsers/Index?page=1" aria-label="Previous">
-                                <span aria-hidden="true">&laquo;</span>
-                            </a>
-                        }
+                        <a href="/ApplicationUsers/Index?currentPage=@(ViewBag.currentPage-1)&searchString=@ViewBag.searchString" aria-label="Previous">
+                            <span aria-hidden="true">&laquo;</span>
+                        </a>
                     </li>
 
-
-                    @for (int i = 1; i <= ViewBag.lastpage; i++)
+                    @for (int i = 0; i < ViewBag.lastPage; i++)
                     {
-                        if (ViewBag.search != "")
-                        {
-                            <li>
-                                <a href="/ApplicationUsers/Index?page=@i&search=@ViewBag.searchstring">@(i)</a>
-                            </li>
-                        }
-                        else
-                        {
-                            <li><a href="/ApplicationUsers/Index?page=@i">@(i)</a></li>
-                        }
-
+                        <li>
+                            <a href="/ApplicationUsers/Index?currentPage=@i&searchString=@ViewBag.searchString">@(i+1)</a>
+                        </li>
                     }
 
                     <li>
-                        @if (ViewBag.search != "")
-                        {
-                            <a href="/ApplicationUsers/Index?page=@(ViewBag.lastPage)&search=@ViewBag.SearchString" arialabel="Next">
-                                <span aria-hidden="true">&raquo;</span>
-                            </a>
-                        }
-                        else
-                        {
-                            <a href="/ApplicationUsers/Index?page=@(ViewBag.lastPage)" arialabel="Next">
-                                <span aria-hidden="true">&raquo;</span>
-                            </a>
-                        }
-
+                        <a href="/ApplicationUsers/Index?currentPage=@(ViewBag.currentPage+1)&searchString=@ViewBag.searchString" arialabel="Next">
+                            <span aria-hidden="true">&raquo;</span>
+                        </a>
                     </li>
-
-
                 </ul>
-
-
             </nav>
-
-
         </div>
 
         <div class="containerGroups">
-            @foreach (var profile in ViewBag.Profiles)
+            @foreach (ApplicationUser profile in Model)
             {
                 <div class="containerPanel">
                     <div class="panel panel-default panelGroup">
-                        <div class="paanelHeder panel-heading">@profile.FirstName</div>
+                        <div class="paanelHeder panel-heading">@profile.FirstName @profile.LastName</div>
                         <div class="panel-body">
-                            Descriere profil: <strong>@profile.LastName</strong>
                             <br /><br />
                             Profilul este: @if (profile.PrivateProfile == true)
                             {
@@ -133,8 +99,11 @@
                             
                             <hr>
                         </div>
+                       
                         <div class="panel panel-footer panelFooter">
-                            <a class="btn btn-success btn btn-sm" style="background-color: #36b4e8; color: black" href="/ApplicationUsers/Show/@profile.Id">Afisare profil</a>
+                            @if ((profile.PrivateProfile && User.Identity.IsAuthenticated) || !profile.PrivateProfile) {
+                              <a class="btn btn-success btn btn-sm" style="background-color: #36b4e8; color: black" href="/ApplicationUsers/Show/@profile.Id">Afisare profil</a>
+                            }
                         </div>
                     </div>
                 </div>

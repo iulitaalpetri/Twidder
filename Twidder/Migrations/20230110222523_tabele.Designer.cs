@@ -12,8 +12,8 @@ using Twidder.Data;
 namespace Twidder.Migrations
 {
     [DbContext(typeof(ApplicationDbContext))]
-    [Migration("20230110015916_Anne1")]
-    partial class Anne1
+    [Migration("20230110222523_tabele")]
+    partial class tabele
     {
         protected override void BuildTargetModel(ModelBuilder modelBuilder)
         {
@@ -335,32 +335,6 @@ namespace Twidder.Migrations
                     b.ToTable("Comments", "Identity");
                 });
 
-            modelBuilder.Entity("Twidder.Models.Friend", b =>
-                {
-                    b.Property<int>("id")
-                        .ValueGeneratedOnAdd()
-                        .HasColumnType("int");
-
-                    SqlServerPropertyBuilderExtensions.UseIdentityColumn(b.Property<int>("id"), 1L, 1);
-
-                    b.Property<int>("FriendshipId")
-                        .HasColumnType("int");
-
-                    b.Property<string>("User1_Id")
-                        .HasColumnType("nvarchar(450)");
-
-                    b.Property<string>("User2_Id")
-                        .HasColumnType("nvarchar(450)");
-
-                    b.HasKey("id");
-
-                    b.HasIndex("User1_Id");
-
-                    b.HasIndex("User2_Id");
-
-                    b.ToTable("Friends", "Identity");
-                });
-
             modelBuilder.Entity("Twidder.Models.Group", b =>
                 {
                     b.Property<int>("Id")
@@ -370,7 +344,8 @@ namespace Twidder.Migrations
                     SqlServerPropertyBuilderExtensions.UseIdentityColumn(b.Property<int>("Id"), 1L, 1);
 
                     b.Property<string>("CreatorId")
-                        .HasColumnType("nvarchar(max)");
+                        .HasMaxLength(1000)
+                        .HasColumnType("nvarchar(1000)");
 
                     b.Property<string>("GroupDescription")
                         .IsRequired()
@@ -496,21 +471,6 @@ namespace Twidder.Migrations
                     b.Navigation("Post");
 
                     b.Navigation("User");
-                });
-
-            modelBuilder.Entity("Twidder.Models.Friend", b =>
-                {
-                    b.HasOne("Twidder.Models.ApplicationUser", "User1")
-                        .WithMany()
-                        .HasForeignKey("User1_Id");
-
-                    b.HasOne("Twidder.Models.ApplicationUser", "User2")
-                        .WithMany()
-                        .HasForeignKey("User2_Id");
-
-                    b.Navigation("User1");
-
-                    b.Navigation("User2");
                 });
 
             modelBuilder.Entity("Twidder.Models.Post", b =>

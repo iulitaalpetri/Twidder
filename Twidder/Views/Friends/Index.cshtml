@@ -1,0 +1,70 @@
+﻿@{
+    ViewBag.Title = "Index";
+}
+
+
+Friends
+
+
+Prietenii mei
+@if(ViewBag.Friends is not null)
+{
+    
+@foreach (ApplicationUser friendRequest in ViewBag.Friends)
+{
+    <div class="containerPanel">
+        <div class="panel panel-default panelGroup">
+            <div class="paanelHeder panel-heading">@friendRequest.FirstName @friendRequest.LastName</div>
+            <div class="panel-body">
+                <br /><br />
+                Profilul este: @if (friendRequest.PrivateProfile == true)
+                {
+                    <text>privat</text>
+                }
+                else
+                {
+                    <text>public</text>
+                }
+                <br />
+                <a class="btn btn-success btn btn-sm" style="background-color: #36b4e8; color: black" href="/Friends/DeleteRequest/@friendRequest.Id">Sterge prietenia</a>
+
+                <hr>
+            </div>
+
+        </div>
+    </div>
+}
+}
+
+Cereri de prietenie:
+@if (ViewBag.RequestFrom is not null)
+{
+    
+@foreach (ApplicationUser friendRequest in ViewBag.RequestFrom)
+{
+         <div class="containerPanel">
+                        <div class="panel panel-default panelGroup">
+            <div class="paanelHeder panel-heading">@friendRequest.FirstName @friendRequest.LastName</div>
+                            <div class="panel-body">
+                                <br /><br />
+                                Profilul este: @if (friendRequest.PrivateProfile == true)
+                                {
+                                    <text>privat</text>
+                                }
+                                else
+                                {
+                                    <text>public</text>
+                                }
+                                <br />
+
+                                <hr>
+                            </div>
+
+                            <div class="panel panel-footer panelFooter">
+                <a class="btn btn-success btn btn-sm" style="background-color: #36b4e8; color: black" href="/Friends/AcceptRequest/@friendRequest.Id">Accepta prietenia</a>
+                <a class="btn btn-success btn btn-sm" style="background-color: #36b4e8; color: black" href="/Friends/DeleteRequest/@friendRequest.Id">Respinge prietenia</a>
+                            </div>
+                        </div>
+                    </div>
+}
+}

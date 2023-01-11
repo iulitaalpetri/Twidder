@@ -103,7 +103,6 @@ namespace Twidder.Controllers
             Group grup = db.Groups.Include("Users").Include("Posts")
                                  .Where(grup => grup.Id == id)
                                  .First();
-
             ViewBag.UserCurent = _userManager.GetUserId(User);
             ViewBag.EsteAdmin = User.IsInRole("Admin");
             var user = _userManager.FindByIdAsync(grup.CreatorId);
@@ -123,7 +122,7 @@ namespace Twidder.Controllers
             {
                 db.Posts.Add(post);
                 db.SaveChanges();
-                return Redirect("/Posts/Show/" + post.Id);
+                return Redirect("/Groups/Show/" + post.Id);
             }
 
             else

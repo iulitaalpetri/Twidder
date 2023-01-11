@@ -21,8 +21,8 @@
         var user = ViewBag.FriendRequests[i];
         <div class="panel-body">
             <strong>@user.FirstName</strong>
-            <a class="btn btn-danger pull-right" href="/ApplicationUsers/DeclineFriend/@ViewBag.Id/@i" style="margin-left: 10px"> Decline Request </a>
-            <a class="btn btn-succes pull-right" style="background-color: #36b4e8; color: black;" href="/ApplicationUsers/AddFriend/@ViewBag.Id/@i"> Add Friend </a>
+            <a class="btn btn-danger pull-right" href="/Friends/DeclineFriend/@ViewBag.Id/@i" style="margin-left: 10px"> Decline Request </a>
+            <a class="btn btn-succes pull-right" style="background-color: #36b4e8; color: black;" href="/Friends/AddFriend/@ViewBag.Id/@i"> Add Friend </a>
 
             <br /> <hr />
         </div>
